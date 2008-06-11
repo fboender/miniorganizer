@@ -1,0 +1,108 @@
+html, body {
+	margin: 0px;
+	background-color: #000000;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: small;
+	font-weight: normal;
+}
+div#header {
+	background-color: #2f2f2f;
+	height: 200px;
+}
+div#header div#header_logo_img {
+	position: absolute;
+	left: 50px;
+	top: 25px;
+}
+div#header div#header_logo_text{
+	position: absolute;
+	left: 250px;
+	top: 60px;
+}
+div#menu {
+	background-image: url(/images/menu_bg.png);
+	height: 40px;
+	text-align: center;
+}
+div#menu_l {
+	background-image: url(/images/menu_l.png);
+	height: 22px;
+	width: 27px;
+	float: left;
+}
+div#menu_c {
+	font-family: arial, verdana, helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 14px;
+	padding-top: 5px;
+}
+div#menu_c a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+div#menu_c img.menu_sep {
+	margin-left: 50px; margin-right: 50px;
+	vertical-align: middle;
+}
+div#menu_r {
+	background-image: url(/images/menu_r.png);
+	height: 22px;
+	width: 27px;
+	float: right;
+}
+div#contents {
+	color: #FFFFFF;
+	margin: 40px;
+}
+div#contents h1 {
+	color: #C61100;
+}
+div#contents a {
+	color: #FFFFFF;
+}
+div#contents p {
+	margin-left: 10px;
+}
+div#sidebar {
+	display: block;
+	float: right;
+	margin: 0px 40px 40px 40px;
+}
+div#screenshots {
+	display: block;
+	padding: 10px;
+	width: 240px;
+}
+div#screenshots a.tab {
+	color: #FFFFFF;
+	background-color: #303030;
+	font-family: verdana, sans-serif;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px 15px 5px 15px;
+}
+div#screenshots img#scr_img {
+	background-color: #303030;
+	padding: 20px;
+}
+div#download {
+	display: block;
+	background-image: url(/images/download.png);
+	height: 45px;
+	width: 217px;
+	text-align: center;
+}
+div#download a {
+	position: relative;
+	top: 5px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #C61100;
+	text-decoration: none;
+}
+table.screenshots td {
+	font-size: small;
+	padding: 20px;
+	width: 240px;
+}

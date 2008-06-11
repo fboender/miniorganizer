@@ -1,0 +1,38 @@
+diff -Naur -x tests -x .svn -x '*.pyc' /home/todsah/temp/icalendar/prop.py ./prop.py
+--- /home/todsah/temp/icalendar/prop.py	2008-05-12 18:18:55.000000000 +0200
++++ ./prop.py	2008-05-12 18:17:25.000000000 +0200
+@@ -424,24 +424,27 @@
+ 
+     def ical(self):
+         sign = ""
+-        if self.td.days < 0:
++        finaltd = self.td
++        if finaltd < timedelta():
+             sign = "-"
++            finaltd = -self.td
++
+         timepart = ""
+-        if self.td.seconds:
++        if finaltd.seconds:
+             timepart = "T"
+-            hours = self.td.seconds // 3600
+-            minutes = self.td.seconds % 3600 // 60
+-            seconds = self.td.seconds % 60
++            hours = finaltd.seconds // 3600
++            minutes = finaltd.seconds % 3600 // 60
++            seconds = finaltd.seconds % 60
+             if hours:
+                 timepart += "%dH" % hours
+             if minutes or (hours and seconds):
+                 timepart += "%dM" % minutes
+             if seconds:
+                 timepart += "%dS" % seconds
+-        if self.td.days == 0 and timepart:
++        if finaltd.days == 0 and timepart:
+             return "%sP%s" % (sign, timepart)
+         else:
+-            return "%sP%dD%s" % (sign, abs(self.td.days), timepart)
++            return "%sP%dD%s" % (sign, abs(finaltd.days), timepart)
+ 
+     def from_ical(ical):
+         """

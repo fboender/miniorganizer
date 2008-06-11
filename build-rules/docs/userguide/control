@@ -1,0 +1,3 @@
+description: The user guide.
+clean: docs/userguide/userguide.html
+cmd: asciidoc -a toc -a numbered -a toclevels=2 -o docs/userguide/userguide.html docs/userguide/userguide.txt
