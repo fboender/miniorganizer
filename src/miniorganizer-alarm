@@ -52,6 +52,7 @@ class SigHandler(object):
 		self.log('Got signal \'%i\'. Writing last seen time to config.' % (signal))
 		self.mo.config['reminder.lastseen'] = int(time.time())
 		self.mo.config.save()
+		self.log('Quiting')
 		sys.exit(0)
 
 class AlarmNotifier(object):
@@ -112,11 +113,13 @@ class AlarmNotifier(object):
 			else:
 				break
 
+		self.lastseen = now
 		self.mo.config['reminder.lastseen'] = int(time.mktime(now.timetuple()))
 		return(True)
 
 	def activate(self, *args):
-		subprocess.Popen('', executable=os.path.join(basepath, 'miniorganizer'))
+		log.debug('Tray icon activated. Spawning Miniorganizer')
+		subprocess.Popen('-d50', executable=os.path.join(basepath, 'miniorganizer'))
 				
 if __name__ == '__main__':
 	# Parse commandline options.
@@ -134,6 +137,8 @@ if __name__ == '__main__':
 	log = logging.getLogger('MINICAL-ALARM')
 	log.setLevel(options.debug)
 	log.addHandler(logging.StreamHandler())
+	log.addHandler(logging.FileHandler(os.path.join(mo.confdir, 'miniorganizer.log')))
+	log.debug('Configuration directory = %s' % (mo.confdir))
 
 	# Catch terminating and other signals so we can write out the last time we
 	# checked for alerts.
