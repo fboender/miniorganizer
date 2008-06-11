@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+# 
+# Copyright (C) 2008 Ferry Boender 
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+
+__author__ = 'Ferry Boender'
+__version__ = '0.1'
+
+import sys
+import os
+import optparse
+import logging
+import StringIO
+import traceback
+import gobject
+import gtk
+
+# Add the lib directory the python path
+basepath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])))
+sys.path.insert(0, os.path.join(basepath, 'lib'))
+
+import kiwi
+import miniorganizer
+
+kiwi.environ.environ._resources = {
+	'glade': [os.path.join(basepath, 'glade')],
+	'pixmap': [os.path.join(basepath, 'pixmaps')]
+}
+
+class ErrorReporter(object):
+	def __init__(self, mo, stderr_buf, stderr):
+		self.mo = mo
+		self.stderr_buf = stderr_buf
+		self.stderr = stderr
+		self.pos = 0
+
+	def showErrors(self, *args):
+		# If any errors have been written to stderr
+		if stderr_buf.len > self.pos:
+			# Get the new text written to stderr
+			stderr_buf.seek(self.pos)
+			text = stderr_buf.read()
+			self.pos = stderr_buf.len
+			self.stderr.write(text)
+
+			# Show the error dialog
+			mo_error = miniorganizer.ui.ErrorUI(mo, text)
+			mo_error.run()
+		return(True)
+
+if __name__ == "__main__":
+	# Parse commandline options
+	parser = optparse.OptionParser(version=__version__, description='Small no-nonsense personal digital assistant')
+	parser.set_usage(sys.argv[0] + " [option]")
+
+	#parser.add_option("-c", "--calendar", dest="calendar", action="store", default=None, help="iCalendar file to open.")
+	parser.add_option("-d", "--debug", dest="debug", action="store", default=0, type="int", metavar="DEBUG", help="Debug level (1-50).")
+
+	(options, args) = parser.parse_args()
+
+	# Set up logging
+	options.debug = 50 - options.debug # User-friendlyness. Higher = more
+	log = logging.getLogger('MINICAL')
+	log.setLevel(options.debug)
+	log.addHandler(logging.StreamHandler())
+
+	mo = miniorganizer.MiniOrganizer()
+
+	if gtk.check_version(2, 10, 0):
+		sys.stderr.write('MiniOrganizer requires at least GTK v2.10 or higher\n')
+		sys.exit(1)
+
+	if options.debug == 50:
+		# Start intercepting stderr so we can display GTK intercepted
+		# exceptions to the user.
+		stderr = sys.stderr
+		try:
+			stderr_buf = StringIO.StringIO('')
+			sys.stderr = stderr_buf
+			errrep = ErrorReporter(mo, stderr_buf, stderr)
+			gobject.timeout_add(600, errrep.showErrors)
+			mo_ui = miniorganizer.ui.MiniOrganizerUI(mo)
+		except Exception, e:
+			stderr.write(traceback.format_exc(e))
+			sys.exit(2)
+
+	else:
+		mo_ui = miniorganizer.ui.MiniOrganizerUI(mo)
+
+	mo.save()

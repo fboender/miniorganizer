@@ -1,0 +1,153 @@
+#!/usr/bin/env python
+# 
+# Copyright (C) 2008 Ferry Boender 
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+import os
+
+# Add the lib directory the python path
+basepath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])))
+sys.path.insert(0, os.path.join(basepath, 'lib'))
+
+import signal
+import atexit
+import logging
+import stat
+import optparse
+import icalendar
+import datetime
+import time
+import kiwi
+import miniorganizer.ui
+import miniorganizer.config
+import gtk
+import gobject
+import subprocess
+from miniorganizer.models import AlarmModel
+
+kiwi.environ.environ._resources = {
+	'glade': [os.path.join(basepath, 'glade')],
+	'pixmap': [os.path.join(basepath, 'pixmaps')]
+}
+
+class SigHandler(object):
+	def __init__(self, mo):
+		self.mo = mo
+		self.log = logging.getLogger('MINICAL-ALARM')
+
+	def handle(self, signal, traceback):
+		self.log('Got signal \'%i\'. Writing last seen time to config.' % (signal))
+		self.mo.config['reminder.lastseen'] = int(time.time())
+		self.mo.config.save()
+		sys.exit(0)
+
+class AlarmNotifier(object):
+	def __init__(self, mo):
+		# Load the organizer and determine the last time we've seen so we can alert
+		# for missed alarms.
+		self.mo = mo
+		self.log = logging.getLogger('MINICAL-ALARM')
+		self.lastseen = datetime.datetime.fromtimestamp(self.mo.config['reminder.lastseen'])
+		self.snoozes = []
+		self.alarms = self.loadAlarms()
+
+		self.log.debug('Last seen time is \'%s\'' % (self.lastseen))
+
+	def loadAlarms(self):
+		# Load the alarms and filter out any that we've already alerted for. Then
+		# sort the alarms so we can alert for the one at the top.
+		alarms = []
+		for alarm in mo.getAlarms():
+			trigger_dt = alarm.get_parent().get_start() + alarm.get_delta()
+			if trigger_dt >= self.lastseen:
+				alarms.append((trigger_dt, alarm))
+		for snooze in self.snoozes:
+			alarms.append(snooze)
+		alarms.sort()
+
+		for x in alarms:
+			self.log.debug('Alert for ical item \'%s\' at %s' % (x[1].get_parent().get_summary(), x[0]))
+
+		return(alarms)
+		
+	def poll(self):
+		# Check if the calendar has changed
+		if mo.changed():
+			self.log.debug('Reloading calendar')
+			mo.reload()
+			self.alarms = self.loadAlarms()
+
+		now = datetime.datetime.now()
+
+		# While there are alarms to be displayed
+		while True:
+			if not self.alarms:
+				break
+
+			# Take the trigger time and the alarm. If we haven't alerted for this
+			# alarm before, and it's time to alert for it, show the alert.
+			trigger, alarm = self.alarms[0]
+			if trigger > self.lastseen and trigger < now:
+				self.alarms.pop(0)
+				reminder = miniorganizer.ui.ReminderUI(mo, alarm.get_parent())
+				snooze_delta = reminder.run()
+				if snooze_delta:
+					log.debug('Snoozing alarm for %s' % (snooze_delta))
+					self.snoozes.append((datetime.datetime.now() + snooze_delta, alarm))
+					self.alarms.append((datetime.datetime.now() + snooze_delta, alarm))
+					self.alarms.sort()
+			else:
+				break
+
+		self.mo.config['reminder.lastseen'] = int(time.mktime(now.timetuple()))
+		return(True)
+
+	def activate(self, *args):
+		subprocess.Popen('', executable=os.path.join(basepath, 'miniorganizer'))
+				
+if __name__ == '__main__':
+	# Parse commandline options.
+	parser = optparse.OptionParser()
+	parser.set_usage(sys.argv[0] + " [option]")
+
+	parser.add_option("-d", "--debug", dest="debug", action="store", default=0, type="int", metavar="DEBUG", help="Debug level (1-50).")
+
+	options, args = parser.parse_args()
+
+	mo = miniorganizer.MiniOrganizer()
+
+	# Set up logging
+	options.debug = 50 - options.debug # User-friendlyness. Higher = more
+	log = logging.getLogger('MINICAL-ALARM')
+	log.setLevel(options.debug)
+	log.addHandler(logging.StreamHandler())
+
+	# Catch terminating and other signals so we can write out the last time we
+	# checked for alerts.
+	sighandler = SigHandler(mo)
+	for sig in [signal.SIGHUP, signal.SIGINT, signal.SIGQUIT, signal.SIGTERM]:
+		signal.signal(sig, sighandler.handle)
+
+	alarmNotifier = AlarmNotifier(mo)
+
+	# Show the Tray icon
+	trayicon = gtk.status_icon_new_from_file(os.path.join(basepath, 'glade', 'miniorganizer-32.png'))
+	trayicon.set_tooltip('MiniOrganizer Alarm notifier')
+	trayicon.set_visible(True)
+	trayicon.connect('activate', alarmNotifier.activate)
+
+	gobject.timeout_add(600, alarmNotifier.poll)
+	gtk.main()
