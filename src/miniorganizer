@@ -70,14 +70,16 @@ if __name__ == "__main__":
 
 	(options, args) = parser.parse_args()
 
+	mo = miniorganizer.MiniOrganizer()
+
 	# Set up logging
 	options.debug = 50 - options.debug # User-friendlyness. Higher = more
 	log = logging.getLogger('MINICAL')
 	log.setLevel(options.debug)
 	log.addHandler(logging.StreamHandler())
+	log.addHandler(logging.FileHandler(os.path.join(mo.confdir, 'miniorganizer.log')))
 
-	mo = miniorganizer.MiniOrganizer()
-
+	log.debug('test')
 	if gtk.check_version(2, 10, 0):
 		sys.stderr.write('MiniOrganizer requires at least GTK v2.10 or higher\n')
 		sys.exit(1)

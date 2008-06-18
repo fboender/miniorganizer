@@ -143,7 +143,7 @@ if __name__ == '__main__':
 	# Catch terminating and other signals so we can write out the last time we
 	# checked for alerts.
 	sighandler = SigHandler(mo)
-	for sig in [signal.SIGHUP, signal.SIGINT, signal.SIGQUIT, signal.SIGTERM]:
+	for sig in [signal.SIGHUP, signal.SIGINT, signal.SIGQUIT, signal.SIGABRT, signal.SIGTERM]:
 		signal.signal(sig, sighandler.handle)
 
 	alarmNotifier = AlarmNotifier(mo)
