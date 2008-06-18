@@ -1,0 +1,46 @@
+MiniOrganizer User guide
+========================
+
+Introduction
+------------
+
+This document serves as the user guide to MiniOrganizer, a small, no-nonsense
+personal digital organizer. This manual gives information on MiniOrganizer,
+what it is, what it can do, how to install and use it and various other useful
+information for end-users.
+
+About
+-----
+
+MiniOrganizer is a small no-nonsense personal digital organizer written in
+GTK2, featuring appointments, todos and notes. It uses iCalendar files as its
+native backend, supports multiple alarms per appointment/todo and has recursive
+todos.
+
+Installation
+-----------
+
+Requirements
+~~~~~~~~~~~~
+
+MiniOrganizer requires the following software in order to run properly:
+
+* Python (v2.4+) (http://python.org/download/[])
+* Python GTK-2 bindings (http://www.pygtk.org/downloads.html[])
+* Python DateUtil 
+* Python Glade2
+
+Legal
+-----
+
+'MiniOrganizer' is Copyright 2008 by Ferry Boender and is released under the
+GNU General Public License v3 or higher. See the LICENSE file for more
+information.
+
+'Kiwi', which is distributed with MiniOrganizer, is Copyright 2003-2006 by
+Async Open Source and is released under the GNU Lesser General Public License
+v2.1 or higher. See the lib/kiwi/LICENSE.txt file for more information.
+
+'iCalendar', which is distributed with MiniOrganizer, is Copyright 2008 by Max
+M et al and is released under the GNU Lesser General Public License v2.1. See
+lib/icalendar/LICENSE.txt for more information.
