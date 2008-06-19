@@ -12,10 +12,23 @@ information for end-users.
 About
 -----
 
+General
+~~~~~~~
+
 MiniOrganizer is a small no-nonsense personal digital organizer written in
 GTK2, featuring appointments, todos and notes. It uses iCalendar files as its
 native backend, supports multiple alarms per appointment/todo and has recursive
 todos.
+
+Features
+~~~~~~~~
+
+MiniOrganizer currently features:
+
+* Appointments.
+* Hierarchical Todos.
+* Multiple alarms per appointment and todo.
+* Alarm notification.
 
 Installation
 -----------
@@ -30,6 +43,38 @@ MiniOrganizer requires the following software in order to run properly:
 * Python DateUtil 
 * Python Glade2
 
+Instructions - Ubuntu / Debian
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to install MiniOrganizer on an Ubuntu or Debian system, follow these steps:
+
+Python should already be installed on your system. If you're using a reasonably
+up-to-date system, it should also be the correct version (v2.4 or higher). So
+the first thing to do is install the required Python libraries. 
+
+Use your package manager to install the following Ubuntu/Debian packages: 
+
+* python-gtk2
+* python-glade2
+* python-dateutil
+
+For the commandline based Aptitude, this would be:
+
+ sudo aptitude install python-gtk2 python-glade2 python-dateutil
+
+Now download the MiniOrganizer tarball from the MiniOrganizer homepage and
+unpack it using your archive manager. For the commandline:
+
+ tar -vxzf miniorganizer-0.1.tar.gz
+
+Change to the unarchived directory, and run 'setup.sh':
+
+ cd miniorganizer-0.1/
+ ./setup.sh
+
+This will install MiniOrganizer in the '/usr/local/share/miniorganizer'
+directory. Links to the binaries will be installed in '/usr/local/bin/'.
+ 
 Legal
 -----
 
