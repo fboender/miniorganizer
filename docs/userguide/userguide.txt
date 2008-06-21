@@ -17,7 +17,7 @@ General
 
 MiniOrganizer is a small no-nonsense personal digital organizer written in
 GTK2, featuring appointments, todos and notes. It uses iCalendar files as its
-native backend, supports multiple alarms per appointment/todo and has recursive
+native back-end, supports multiple alarms per appointment/todo and has recursive
 todos.
 
 Features
@@ -29,6 +29,20 @@ MiniOrganizer currently features:
 * Hierarchical Todos.
 * Multiple alarms per appointment and todo.
 * Alarm notification.
+* (Gnome) Panel docking.
+
+Intended features
+~~~~~~~~~~~~~~~~~
+
+Here's a list of features that are intended to be implemented in MiniOrganizer,
+just to give you an idea of where this thing is supposed to be heading:
+
+* Notes (Wiki-like, Recursive and WYSIWYG editing with headings, etc)
+* Linking Appointments, Todos and Notes.
+* Sending and receiving of appointment requests.
+* Scanning a local and/or remote mailbox for appointment requests (MS Outlook \'integration\').
+* Syncing with OpenSync servers
+* Various additional personal planning features.
 
 Installation
 -----------
@@ -61,6 +75,11 @@ Use your package manager to install the following Ubuntu/Debian packages:
 For the commandline based Aptitude, this would be:
 
  sudo aptitude install python-gtk2 python-glade2 python-dateutil
+
+Now follow the general instructions mentioned below.
+
+Instructions - General
+~~~~~~~~~~~~~~~~~~~~~~
 
 Now download the MiniOrganizer tarball from the MiniOrganizer homepage and
 unpack it using your archive manager. For the commandline:
