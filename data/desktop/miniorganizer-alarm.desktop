@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Version=1.0
+Name=No Name
+Name[en_US]=MiniOrganizer Alarm
+Exec=/usr/local/lib/miniorganizer/miniorganizer-alarm
+X-GNOME-Autostart-enabled=true

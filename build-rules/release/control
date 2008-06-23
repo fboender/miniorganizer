@@ -1,0 +1,3 @@
+description: Create a new MiniOrganizer release.
+require: docs.userguide
+clean: releases/
