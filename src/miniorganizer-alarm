@@ -92,6 +92,7 @@ class AlarmNotifier(object):
 			self.alarms = self.loadAlarms()
 
 		now = datetime.datetime.now()
+		self.mo.config['reminder.lastseen'] = int(time.mktime(now.timetuple()))
 
 		# While there are alarms to be displayed
 		while True:
@@ -110,11 +111,14 @@ class AlarmNotifier(object):
 					self.snoozes.append((datetime.datetime.now() + snooze_delta, alarm))
 					self.alarms.append((datetime.datetime.now() + snooze_delta, alarm))
 					self.alarms.sort()
+
+				# Save the config with the last seen time so we don't alert for
+				# alarms twice.
+				self.mo.config.save()
 			else:
 				break
 
 		self.lastseen = now
-		self.mo.config['reminder.lastseen'] = int(time.mktime(now.timetuple()))
 		return(True)
 
 	def activate(self, *args):
