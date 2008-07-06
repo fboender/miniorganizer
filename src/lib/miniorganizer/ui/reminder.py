@@ -35,6 +35,8 @@ class ReminderUI(GladeDelegate):
 		self.label_from.set_text(event.get_start().ctime())
 		self.label_to.set_text(event.get_end().ctime())
 		self.label_description.set_text('%s' % (event.get_description()))
+		if getattr(event, 'get_location'):
+			self.label_location.set_text(event.get_location())
 
 	def run(self):
 		self.show_all()

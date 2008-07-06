@@ -50,6 +50,7 @@ class EventEditUI(GladeDelegate):
 		if event.get_start().time() == notime and event.get_end().time() == notime:
 			self.checkbutton_wholeday.set_active(True)
 		self.summary.set_text(self.event.get_summary())
+		self.location.set_text(self.event.get_location())
 		c_buffer = self.description.get_buffer()
 		c_inspos = c_buffer.get_insert()
 		c_insiter = c_buffer.get_iter_at_mark(c_inspos)
@@ -109,6 +110,7 @@ class EventEditUI(GladeDelegate):
 				self.event.add_alarm(alarm)
 			
 		self.event.set_summary(self.summary.get_text())
+		self.event.set_location(self.location.get_text())
 		self.event.set_description(description)
 		self.event.set_start(start_dt)
 		self.event.set_end(end_dt)

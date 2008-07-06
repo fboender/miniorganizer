@@ -87,6 +87,12 @@ class EventModel(Model):
 	def get_durationformat(self):
 		return(str(self.get_duration()))
 
+	def get_location(self):
+		return(self.__vevent.get('LOCATION', ''))
+
+	def set_location(self, location):
+		self.__vevent.set('LOCATION', location)
+
 	def get_alarms(self):
 		return(self.__alarms)
 
