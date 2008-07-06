@@ -75,6 +75,12 @@ class EventEditUI(GladeDelegate):
 			self.dateedit_start.entry_time.update(datetime.time(0, 0))
 			self.dateedit_end.entry_time.update(datetime.time(0, 0))
 
+			start_dt = self.dateedit_start.dt
+			end_dt = self.dateedit_end.dt
+
+			if start_dt == end_dt:
+				self.dateedit_end.set_datetime(end_dt + datetime.timedelta(days=+1))
+
 	def on_button_ok__clicked(self, *args):
 		c_buffer = self.description.get_buffer()
 		c_startpos = c_buffer.get_iter_at_offset(0)
