@@ -55,6 +55,11 @@ class MiniOrganizerUI(GladeDelegate):
 	def on_menu_about__activate(self, *args):
 		miniorganizer.ui.AboutUI()
 
+	def on_menuitem_import__activate(self, *args):
+		filename = dialogs.open('Select file to import', patterns=['*.ics'])
+		if filename:
+			self.mo.import_(filename)
+
 	def quit(self):
 		self.view.hide()
 		gtk.main_quit()

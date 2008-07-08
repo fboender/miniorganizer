@@ -63,14 +63,21 @@ class ErrorReporter(object):
 if __name__ == "__main__":
 	# Parse commandline options
 	parser = optparse.OptionParser(version=__version__, description='Small no-nonsense personal digital assistant')
-	parser.set_usage(sys.argv[0] + " [option]")
+	parser.set_usage(sys.argv[0] + " [option] [ICAL]")
 
 	#parser.add_option("-c", "--calendar", dest="calendar", action="store", default=None, help="iCalendar file to open.")
+	parser.add_option("-i", "--import", dest="import_", action="store", type="string", metavar="FILE", help="Import FILE into the calendar.")
 	parser.add_option("-d", "--debug", dest="debug", action="store", default=0, type="int", metavar="DEBUG", help="Debug level (1-50).")
 
 	(options, args) = parser.parse_args()
+	calfile = None
+	if args:
+		calfile = args[0]
+		if not os.path.isfile(calfile):
+			sys.stderr.write('No such file \'\'' % (calfile))
+			sys.exit(2)
 
-	mo = miniorganizer.MiniOrganizer()
+	mo = miniorganizer.MiniOrganizer(calfile)
 
 	# Set up logging
 	options.debug = 50 - options.debug # User-friendlyness. Higher = more
@@ -79,10 +86,12 @@ if __name__ == "__main__":
 	log.addHandler(logging.StreamHandler())
 	log.addHandler(logging.FileHandler(os.path.join(mo.confdir, 'miniorganizer.log')))
 
-	log.debug('test')
 	if gtk.check_version(2, 10, 0):
 		sys.stderr.write('MiniOrganizer requires at least GTK v2.10 or higher\n')
 		sys.exit(1)
+
+	if options.import_:
+		mo.import_(options.import_)
 
 	if options.debug == 50:
 		# Start intercepting stderr so we can display GTK intercepted
@@ -96,9 +105,9 @@ if __name__ == "__main__":
 			mo_ui = miniorganizer.ui.MiniOrganizerUI(mo)
 		except Exception, e:
 			stderr.write(traceback.format_exc(e))
-			sys.exit(2)
-
+			sys.exit(3)
 	else:
 		mo_ui = miniorganizer.ui.MiniOrganizerUI(mo)
-
-	mo.save()
+	
+	if mo.config['miniorganizer.auto_save']:
+		mo.save()

@@ -35,7 +35,7 @@ class MiniOrganizer:
 	through this class.
 	"""
 	
-	def __init__(self):
+	def __init__(self, calfile = None):
 		self.log = logging.getLogger('MINICAL')
 
 		self.__models = []
@@ -44,8 +44,6 @@ class MiniOrganizer:
 		self.homedir = os.environ['HOME']
 		self.confdir = os.path.join(self.homedir, '.miniorganizer')
 		self.conffile = os.path.join(self.confdir, 'miniorganizer.ini')
-		self.calfile = os.path.join(self.confdir, 'miniorganizer.ics')
-		self.first_time = False
 
 		if not os.path.exists(self.confdir):
 			self.first_time = True
@@ -60,12 +58,18 @@ class MiniOrganizer:
 			'reminder.default_snooze': (int, 10),
 			'events.default_show': (str, 'Month'),
 			'events.cal_show_weeknr': (bool, 1),
+			'miniorganizer.auto_save': (bool, 1),
 		}
 		self.config = config.Config(self.conffile, defaults=config_defaults)
+		self.first_time = False
 
-		if not os.path.exists(self.calfile):
-			self.save()
+		if calfile:
+			self.calfile = calfile
+			self.config['miniorganizer.auto_save'] = False
 		else:
+			self.calfile = os.path.join(self.confdir, 'miniorganizer.ics')
+
+		if os.path.exists(self.calfile):
 			self.load()
 
 	def load(self):
@@ -85,7 +89,7 @@ class MiniOrganizer:
 		self.load()
 
 	def save(self):
-		self.log.debug('Saving the calendar')
+		self.log.debug('Saving calendar \'%s\'' % (self.calfile))
 
 		# Save the calendar
 		f = file(self.calfile, 'w')
@@ -95,6 +99,16 @@ class MiniOrganizer:
 		# Save the configuration
 		self.config.save()
 
+	def import_(self, calfile):
+		f = file(calfile, 'r')
+		contents = f.read()
+		f.close()
+
+		calendar = icalendar.Calendar.from_string(contents)
+		for item in calendar.subcomponents:
+			model = self.factory.modelFromVComponent(item)
+			self.add(model)
+		
 	def getEvents(self):
 		return([model for model in self.__models if isinstance(model, EventModel)])
 
@@ -165,3 +179,4 @@ class MiniOrganizer:
 		uid += ''.join([random.choice(chars) for i in range(16)])
 		uid += '@' + gethostname()
 		return(uid)
+
