@@ -2,7 +2,6 @@ Component			Todo
 ------------------+----------------------------------------------------------------------
 miniorganizer		Refactor models.
 miniorganizer		Delete key should delete events/todo's from the list.
-event				Selecting the time in the event datetime editor should select the whole text so it can more easily be replaced.
 event				Evevnt should have location.
 event				Recurring events.
 todo				Composite todo's.
