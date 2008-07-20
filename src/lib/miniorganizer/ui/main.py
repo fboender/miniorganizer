@@ -45,6 +45,9 @@ class MiniOrganizerUI(GladeDelegate):
 			dialogs.warning('This version of MiniOrganizer is still in development. Even though it works, and can be used in everyday life, there may still be bugs in it.\n\nIf you notice such a bug, or see anything else you would like to see changed or added, please contact the author. Your feedback is greatly appreciated.');
 
 		self.menuitem_save.set_sensitive(False)
+		self.menuitem_cut.set_sensitive(False)
+		self.menuitem_copy.set_sensitive(False)
+		self.menuitem_paste.set_sensitive(False)
 
 		gtk.main()
 
