@@ -1,17 +1,13 @@
 Component			Todo
 ------------------+----------------------------------------------------------------------
 miniorganizer		Refactor models.
-miniorganizer		Delete key should delete events/todo's from the list.
-event				Evevnt should have location.
 event				Recurring events.
 todo				Composite todo's.
 todo				Show percentage complete (or progressbar) for composite and normal todos.
 miniorganizer		Inputting a from/to date of 05-23-08 21:00 to 05-24-08 00:00 makes the duration 1 day, hours (should be 3 hours). Does work when entering 00:01
-miniorganizer		Labels in event edit dialog resize vertically. THis shouldn't happen.
 miniorganizer 		RadioButton errors.
 miniorganizer 		Implement notes
 miniorganizer 		Under a raw installation of Debian (4.0), miniorganizer reports various bugs. Fix these.
 miniorganizer 		An event which is a whole day event, and which runs from 06/13/08 to 06/16/08 doesn't appear in the calendar on the 16th (because it ends on 06/16/08 at 00:00).
-miniorganizer 		When starting with a higher debug level, it appears that Python suddenly gives warnings about kgetattr being deprecated and that you should use a property. Annotations about this are available in the source. It should be fixed.
 notifier			Automatic forking in background.
 notifier			Add hour snooze.
