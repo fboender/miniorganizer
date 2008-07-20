@@ -47,6 +47,7 @@ class TodoUI(GladeSlaveDelegate):
 		# Connect signals
 		self.treeview_todo.connect('row-activated', self.treeview_todo__row_activated)
 		self.treeview_todo.connect('selection-changed', self.treeview_todo__selection_changed)
+		self.treeview_todo.connect('key-press-event', self.treeview_todo__key_press_event)
 
 		# Fill the user interface with information
 		for todo in self.mo.getTodos():
@@ -99,3 +100,7 @@ class TodoUI(GladeSlaveDelegate):
 	def treeview_todo__row_activated(self, list, object):
 		miniorganizer.ui.TodoEditUI(self.mo, object)
 		self.parent.menuitem_save.set_sensitive(True)
+	
+	def treeview_todo__key_press_event(self, treeview, event):
+		if event.keyval == gtk.keysyms.Delete:
+			self.on_toolbutton_remove__clicked()

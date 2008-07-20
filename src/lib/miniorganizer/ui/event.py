@@ -54,6 +54,7 @@ class EventUI(GladeSlaveDelegate):
 		# Connect signals
 		self.treeview_event.connect('selection-changed', self.treeview_event__selection_changed)
 		self.treeview_event.connect('row-activated', self.treeview_event__row_activated)
+		self.treeview_event.connect('key-press-event', self.treeview_event__key_press_event)
 
 		self.on_toolbutton_today__clicked()
 	
@@ -80,6 +81,7 @@ class EventUI(GladeSlaveDelegate):
 			self.on_calendar__month_changed(self.calendar)
 			self.on_calendar__day_selected(self.calendar)
 			self.parent.menuitem_save.set_sensitive(True)
+
 
 	def on_toolbutton_remove__clicked(self, *args):
 		sel_event = self.treeview_event.get_selected()
@@ -249,3 +251,7 @@ class EventUI(GladeSlaveDelegate):
 
 		# Enable automatic highlighting of items
 		self.__stop_auto_highlight = False
+	
+	def treeview_event__key_press_event(self, treeview, event):
+		if event.keyval == gtk.keysyms.Delete:
+			self.on_toolbutton_remove__clicked()
