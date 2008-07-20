@@ -70,12 +70,23 @@ class MiniOrganizer:
 			self.calfile = os.path.join(self.confdir, 'miniorganizer.ics')
 
 		if os.path.exists(self.calfile):
-			self.load()
+			self.load(self.calfile)
 
-	def load(self):
-		self.mtime = os.stat(self.calfile)[stat.ST_CTIME]
-		self.log.debug('Loading iCal file \'%s\'.' % (self.calfile))
-		f = file(self.calfile, 'r')
+		self.modified = False
+
+	def clear(self):
+		del self.__models[:]
+		self.calendar = icalendar.Calendar()
+		self.calfile = None
+		self.modified = True
+		# FIXME: Change mtime
+		
+	def load(self, calfile):
+		self.clear()
+
+		self.mtime = os.stat(calfile)[stat.ST_CTIME]
+		self.log.debug('Loading iCal file \'%s\'.' % (calfile))
+		f = file(calfile, 'r')
 		contents = f.read()
 		f.close()
 
@@ -84,20 +95,34 @@ class MiniOrganizer:
 		for item in self.calendar.subcomponents:
 			self.__models.append(self.factory.modelFromVComponent(item))
 
-	def reload(self):
-		self.__models = []
-		self.load()
+		self.calfile = calfile
+		self.config['miniorganizer.auto_save'] = False
 
-	def save(self):
+		self.modified = False
+
+	def reload(self):
+		del self.__models[:]
+		self.load(self.calfile)
+
+	def save(self, filename = None):
 		self.log.debug('Saving calendar \'%s\'' % (self.calfile))
 
-		# Save the calendar
-		f = file(self.calfile, 'w')
-		f.write(self.calendar.as_string())
-		f.close()
+		if filename:
+			# Save As..
+			f = file(filename, 'w')
+			f.write(self.calendar.as_string())
+			f.close()
 
-		# Save the configuration
-		self.config.save()
+			self.calfile = filename
+		elif self.calfile:
+			# Save..
+			f = file(self.calfile, 'w')
+			f.write(self.calendar.as_string())
+			f.close()
+		else:
+			raise Exception('No filename specified')
+
+		self.modified = False
 
 	def import_(self, calfile):
 		f = file(calfile, 'r')
@@ -108,6 +133,8 @@ class MiniOrganizer:
 		for item in calendar.subcomponents:
 			model = self.factory.modelFromVComponent(item)
 			self.add(model)
+
+		self.modified = True
 		
 	def getEvents(self):
 		return([model for model in self.__models if isinstance(model, EventModel)])
@@ -141,6 +168,7 @@ class MiniOrganizer:
 		"""
 		self.calendar.subcomponents.remove(model.get_vcomponent())
 		self.__models.remove(model)
+		self.modified = True
 
 	def delRelatedTo(self, component):
 		"""
@@ -151,14 +179,15 @@ class MiniOrganizer:
 		while components:
 			components.extend(self.getRelatedComponents(components[0].get_uid()))
 			self.delete(components.pop(0))
+		self.modified = True
 
 	def add(self, model):
 		"""
-
 		Add a component to the calendar.
 		"""
 		self.calendar.add_component(model.get_vcomponent())
 		self.__models.append(model)
+		self.modified = True
 
 	def changed(self):
 		"""
@@ -167,7 +196,7 @@ class MiniOrganizer:
 		"""
 		mtime = os.stat(self.calfile)[stat.ST_CTIME]
 		return(mtime > self.mtime)
-			
+
 	@staticmethod
 	def genUID():
 		"""

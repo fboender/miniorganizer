@@ -57,6 +57,16 @@ class EventUI(GladeSlaveDelegate):
 
 		self.on_toolbutton_today__clicked()
 	
+	def refresh(self):
+		"""
+		Refresh the entire events tab. This clears everything and rebuilds it.
+		Call this when events are removed outside of this class.
+		"""
+		self.treeview_event.clear()
+		self.calendar.clear_marks()
+		self.on_calendar__month_changed(self.calendar)
+		self.treeview_event__update()
+
 	def on_toolbutton_add__clicked(self, *args):
 		now = datetime.datetime.now()
 		sel_day = self.calendar.get_date()
@@ -69,6 +79,7 @@ class EventUI(GladeSlaveDelegate):
 			self.treeview_event.append(None, event)
 			self.on_calendar__month_changed(self.calendar)
 			self.on_calendar__day_selected(self.calendar)
+			self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_remove__clicked(self, *args):
 		sel_event = self.treeview_event.get_selected()
@@ -77,6 +88,7 @@ class EventUI(GladeSlaveDelegate):
 			self.treeview_event.remove(sel_event)
 			self.on_calendar__month_changed(self.calendar)
 			self.on_calendar__day_selected(self.calendar)
+			self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_edit__clicked(self, *args):
 		sel_event = self.treeview_event.get_selected()
@@ -209,6 +221,7 @@ class EventUI(GladeSlaveDelegate):
 		self.on_calendar__month_changed(self.calendar)
 		self.on_calendar__day_selected(self.calendar)
 		self.treeview_event.select(sel_event, True)
+		self.parent.menuitem_save.set_sensitive(True)
 		# FIXME: Resort the treeview.
 
 	def treeview_event__selection_changed(self, list, selection):

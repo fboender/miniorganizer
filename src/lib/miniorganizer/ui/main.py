@@ -44,21 +44,53 @@ class MiniOrganizerUI(GladeDelegate):
 		if mo.first_time:
 			dialogs.warning('This version of MiniOrganizer is still in development. Even though it works, and can be used in everyday life, there may still be bugs in it.\n\nIf you notice such a bug, or see anything else you would like to see changed or added, please contact the author. Your feedback is greatly appreciated.');
 
+		self.menuitem_save.set_sensitive(False)
+
 		gtk.main()
 
 	def on_window_main__delete_event(self, *args):
 		self.quit()
 		
-	def on_menu_quit__activate(self, *args):
-		self.quit()
+	def on_menuitem_new__activate(self, *args):
+		self.mo.clear()
+		self.tab_events.refresh()
+		self.menuitem_save.set_sensitive(False)
+		
+	def on_menuitem_open__activate(self, *args):
+		filename = dialogs.open('Select file to open', patterns=['*.ics'])
+		if filename:
+			self.mo.load(filename)
 
-	def on_menu_about__activate(self, *args):
-		miniorganizer.ui.AboutUI()
+		self.tab_events.refresh()
+		self.menuitem_save.set_sensitive(False)
+
+	def on_menuitem_save__activate(self, *args):
+		if self.mo.calfile:
+			self.mo.save()
+			self.menuitem_save.set_sensitive(False)
+		else:
+			self.on_menuitem_saveas__activate()
+			
+	def on_menuitem_saveas__activate(self, *args):
+		filename = dialogs.save('Save file as', current_name='untitled.ics')
+		if filename and not filename.endswith('.ics'):
+			filename += '.ics'
+	
+		if filename:
+			self.mo.save(filename)
+			self.menuitem_save.set_sensitive(False)
 
 	def on_menuitem_import__activate(self, *args):
 		filename = dialogs.open('Select file to import', patterns=['*.ics'])
 		if filename:
 			self.mo.import_(filename)
+		self.menuitem_save.set_sensitive(True)
+
+	def on_menuitem_quit__activate(self, *args):
+		self.quit()
+
+	def on_menuitem_about__activate(self, *args):
+		miniorganizer.ui.AboutUI()
 
 	def quit(self):
 		self.view.hide()

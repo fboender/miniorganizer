@@ -62,6 +62,7 @@ class TodoUI(GladeSlaveDelegate):
 		if miniorganizer.ui.TodoEditUI(self.mo, todo):
 			self.mo.add(todo)
 			self.treeview_todo.append(None, todo)
+			self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_edit__clicked(self, *args):
 		todo = self.treeview_todo.get_selected()
@@ -78,6 +79,7 @@ class TodoUI(GladeSlaveDelegate):
 
 		self.treeview_todo.remove(todo, True)
 		self.mo.delRelatedTo(todo)
+		self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_addsub__clicked(self, *args):
 		parent_todo = self.treeview_todo.get_selected()
@@ -86,6 +88,7 @@ class TodoUI(GladeSlaveDelegate):
 			self.mo.add(todo)
 			self.treeview_todo.append(parent_todo, todo)
 			self.treeview_todo.expand(parent_todo)
+			self.parent.menuitem_save.set_sensitive(True)
 		
 	def treeview_todo__selection_changed(self, list, selection):
 		has_selection = selection is not None
@@ -95,3 +98,4 @@ class TodoUI(GladeSlaveDelegate):
 	
 	def treeview_todo__row_activated(self, list, object):
 		miniorganizer.ui.TodoEditUI(self.mo, object)
+		self.parent.menuitem_save.set_sensitive(True)
