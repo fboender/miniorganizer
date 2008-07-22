@@ -16,14 +16,10 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import gtk
-from kiwi.ui.delegates import GladeSlaveDelegate, GladeDelegate
-from kiwi.ui.objectlist import ObjectList, Column, ColoredColumn
+from kiwi.ui.delegates import GladeSlaveDelegate#, GladeDelegate
 from kiwi.ui.widgets.entry import ProxyEntry
 from kiwi.datatypes import ValidationError
 from kiwi.ui.dateentry import DateEntry
-from kiwi.ui import dialogs
-from kiwi.utils import gsignal
 
 class DateTimeEditUI(GladeSlaveDelegate):
 
