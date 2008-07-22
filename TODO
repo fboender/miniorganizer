@@ -1,6 +1,10 @@
 Component			Todo
 ------------------+----------------------------------------------------------------------
 miniorganizer		Refactor models.
+miniorganizer       Cancelling the editing of an event/todo still adds (maybe modifies too?) the event/todo.
+miniorganizer       When loading a ical that contains errors (empty), program crashes.
+miniorganizer       Warn on unsaved changes.
+event               When adding a new alarm to an event and then canceling the alarm and then pressing 'ok' an error occurs.
 event				Recurring events.
 todo				Composite todo's.
 todo				Show percentage complete (or progressbar) for composite and normal todos.
