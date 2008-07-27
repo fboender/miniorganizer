@@ -56,6 +56,10 @@ class EventEditUI(GladeDelegate):
 		c_insiter = c_buffer.get_iter_at_mark(c_inspos)
 		self.description.get_buffer().insert(c_insiter, event.get_description())
 
+		rrule = event.get_recur()
+		if rrule:
+			self.label_recurrence.set_text(rrule['FREQ'][0].capitalize())
+
 		self.show_all()
 		gtk.main()
 
@@ -87,6 +91,8 @@ class EventEditUI(GladeDelegate):
 		recur = x.run()
 		if recur:
 			self.event.set_recur(recur)
+			self.label_recurrence.set_text(recur['FREQ'][0].capitalize())
+
 
 	def on_button_ok__clicked(self, *args):
 		c_buffer = self.description.get_buffer()
