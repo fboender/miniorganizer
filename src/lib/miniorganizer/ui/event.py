@@ -17,6 +17,7 @@
 
 import datetime
 import gtk
+import re
 import miniorganizer.models
 import miniorganizer.ui
 from dateutil.relativedelta import relativedelta
@@ -33,6 +34,7 @@ class EventUI(GladeSlaveDelegate):
 
 		self.__stop_auto_highlight = False # Disable automatic highlighting of events.
 		self.__stop_auto_dayjump = False   # Disable automatically jumping to the start of the event on selection.
+		self.__stop_auto_treeview_update = False   # FIXME
 
 		GladeSlaveDelegate.__init__(self, gladefile='mo_tab_events', toplevel_name='window_main')
 
@@ -82,7 +84,6 @@ class EventUI(GladeSlaveDelegate):
 			self.on_calendar__day_selected(self.calendar)
 			self.parent.menuitem_save.set_sensitive(True)
 
-
 	def on_toolbutton_remove__clicked(self, *args):
 		sel_event = self.treeview_event.get_selected()
 		if sel_event:
@@ -108,7 +109,8 @@ class EventUI(GladeSlaveDelegate):
 		month_start = datetime.datetime(sel_date[0], sel_date[1]+1, 1)
 		month_end = month_start + relativedelta(months=+1, seconds=-1)
 
-		for event in self.mo.getEvents():
+		events = self.mo.getEvents() + self.mo.getRecurEvents(month_start, month_end)
+		for event in events:
 			event_start = event.get_start()
 			event_end = event.get_end()
 
@@ -139,7 +141,8 @@ class EventUI(GladeSlaveDelegate):
 
 		# Highlight an event if it starts on the selected day.
 		highlight_events = []
-		for event in self.mo.getEvents():
+		events = [event for event in self.treeview_event]
+		for event in events:
 			event_start = event.get_start()
 			event_end = event.get_end()
 
@@ -201,8 +204,22 @@ class EventUI(GladeSlaveDelegate):
 		self.treeview_event__update()
 
 	def treeview_event__update(self):
+		if self.__stop_auto_treeview_update:
+			return
+
+		# First, remove all the recurring events, because they're generated on
+		# the fly, so we can't know which ones in the list we need to remove.
+		# Therefor we remove them every time.
+		events_rm = []
+		for event in self.treeview_event:
+			if hasattr(event, 'real_event'):
+				events_rm.append(event)
+		for event in events_rm:
+			self.treeview_event.remove(event)
+
 		# Add the events for the displayed range to the list
-		for event in self.mo.getEvents():
+		events = self.mo.getEvents() + self.mo.getRecurEvents(self.display_start, self.display_end)
+		for event in events:
 			event_start = event.get_start()
 			event_end = event.get_end()
 
@@ -219,14 +236,20 @@ class EventUI(GladeSlaveDelegate):
 		
 	def treeview_event__row_activated(self, list, object):
 		sel_event = self.treeview_event.get_selected()
-		miniorganizer.ui.EventEditUI(self.mo, object)
+		sel_event = getattr(sel_event, 'real_event', sel_event) # Edit real event instead of recurring event
+		miniorganizer.ui.EventEditUI(self.mo, sel_event)
 		self.on_calendar__month_changed(self.calendar)
 		self.on_calendar__day_selected(self.calendar)
-		self.treeview_event.select(sel_event, True)
+		if sel_event in self.treeview_event:
+			self.treeview_event.select(sel_event, True)
 		self.parent.menuitem_save.set_sensitive(True)
-		# FIXME: Resort the treeview.
 
 	def treeview_event__selection_changed(self, list, selection):
+		# Stop the treeview from automatically updating itself because that
+		# will remove the recurring events and regenerate them (with different
+		# instance IDs) which means the selection may be invalid.
+		self.__stop_auto_treeview_update = True
+
 		sel_event = self.treeview_event.get_selected()
 		has_selection = sel_event is not None
 
@@ -238,6 +261,7 @@ class EventUI(GladeSlaveDelegate):
 		# can be automatically selected even if it doesn't start on a
 		# particular day.
 		if self.__stop_auto_dayjump:
+			self.__stop_auto_treeview_update = False
 			return
 
 		# Stop this selection from being overwritten.
@@ -251,6 +275,7 @@ class EventUI(GladeSlaveDelegate):
 
 		# Enable automatic highlighting of items
 		self.__stop_auto_highlight = False
+		self.__stop_auto_treeview_update = False
 	
 	def treeview_event__key_press_event(self, treeview, event):
 		if event.keyval == gtk.keysyms.Delete:

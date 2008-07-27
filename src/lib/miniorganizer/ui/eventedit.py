@@ -82,6 +82,12 @@ class EventEditUI(GladeDelegate):
 			if start_dt == end_dt:
 				self.dateedit_end.set_datetime(end_dt + datetime.timedelta(days=+1))
 
+	def on_button_recurrenceedit__clicked(self, *args):
+		x = miniorganizer.ui.RecurrenceEditUI(self.mo, self.event.get_recur())
+		recur = x.run()
+		if recur:
+			self.event.set_recur(recur)
+
 	def on_button_ok__clicked(self, *args):
 		c_buffer = self.description.get_buffer()
 		c_startpos = c_buffer.get_iter_at_offset(0)

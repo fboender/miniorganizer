@@ -27,6 +27,8 @@ import config
 from models import Factory
 from socket import gethostname
 from models import AlarmModel, TodoModel, EventModel, Factory
+from dateutil import rrule
+import copy
 
 class MiniOrganizer:
 	"""
@@ -138,6 +140,61 @@ class MiniOrganizer:
 		
 	def getEvents(self):
 		return([model for model in self.__models if isinstance(model, EventModel)])
+
+	def getRecurEvents(self, dtstart, dtend):
+		"""
+		Return a list of fake the events, and also generate 'fake' events for
+		recurring events.
+		"""
+		events = []
+		for model in self.__models:
+			if isinstance(model, EventModel):
+				recur = model.get_recur()
+				if recur:
+					freq = getattr(rrule, recur['FREQ'][0])
+					interval = int(recur['INTERVAL'][0])
+					paramdict = {
+						'freq': freq,
+						'dtstart': model.get_start(),
+						'interval': interval,
+						'until': dtend
+					}
+					if recur['FREQ'] == ['WEEKLY'] and 'BYDAY' in recur:
+						paramdict['byweekday'] = [getattr(rrule, weekday) for weekday in recur['BYDAY']]
+					if (recur['FREQ'] == ['MONTHLY'] or recur['FREQ'] == ['YEARLY']) and 'BYDAY' in recur:
+						m = re.match('(-?\d+)(.*)', recur['BYDAY'][0])
+						bd_index = int(m.groups()[0]) - 1
+						if bd_index >= 0:
+							bd_index += 1
+						paramdict['bysetpos'] = bd_index
+						paramdict['byweekday'] = getattr(rrule, m.groups()[1])
+					if 'BYMONTHDAY' in recur:
+						paramdict['bymonthday'] = int(recur['BYMONTHDAY'][0])
+					if 'BYMONTH' in recur:
+						paramdict['bymonth'] = int(recur['BYMONTH'][0])
+					if 'BYYEARDAY' in recur:
+						paramdict['byyearday'] = int(recur['BYYEARDAY'][0])
+
+					# Generate a list of dates on which this event recurs. Then
+					# create fake events which are duplicates of this event so
+					# that they can easily be displayed in the calendar, etc.
+					irrule = rrule.rrule(**paramdict)
+					if model.get_start() > dtstart:
+						recur_dates = irrule.between(model.get_start(), dtend, inc=False)
+					else:
+						recur_dates = irrule.between(dtstart, dtend, inc=False)
+
+					for date in recur_dates:
+						event_start = model.get_start()
+						event_end = model.get_end()
+
+						fakeevent = model.dup()
+						fakeevent.real_event = model # Mark this as a fake (recurring) event instance
+						fakeevent.set_start(date)
+						fakeevent.set_end(date + (event_end - event_start))
+
+						events.append(fakeevent)
+		return(events)
 
 	def getTodos(self):
 		return([model for model in self.__models if isinstance(model, TodoModel)])

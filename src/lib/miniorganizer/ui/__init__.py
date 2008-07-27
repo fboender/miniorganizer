@@ -32,6 +32,7 @@ from eventedit import EventEditUI
 from todoedit import TodoEditUI
 from alarmedit import AlarmEditUI
 from alarmsedit import AlarmsEditUI
+from recurrenceedit import RecurrenceEditUI
 from datetimeedit import DateTimeEditUI
 
 # Misc dialogs
@@ -40,4 +41,4 @@ from error import ErrorUI
 # Because we don't want to polute the namespace with stuff, delete some things
 # here.
 del main, about, reminder, event, todo, notes, eventedit, todoedit
-del alarmedit, alarmsedit, datetimeedit, error
+del alarmedit, alarmsedit, recurrenceedit, datetimeedit, error

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Jul 20 23:13:56 2008 -->
+<!--Generated with glade3 3.4.5 on Mon Jul 21 12:45:46 2008 -->
 <glade-interface>
   <widget class="GtkDialog" id="dialog_main">
     <property name="border_width">5</property>
@@ -14,7 +14,7 @@
         <child>
           <widget class="GtkTable" id="table2">
             <property name="visible">True</property>
-            <property name="n_rows">8</property>
+            <property name="n_rows">9</property>
             <property name="n_columns">4</property>
             <property name="row_spacing">10</property>
             <child>
@@ -31,6 +31,48 @@
             </child>
             <child>
               <placeholder/>
+            </child>
+            <child>
+              <widget class="GtkButton" id="button_recurrenceedit">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">Edit</property>
+                <property name="response_id">0</property>
+              </widget>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="right_attach">4</property>
+                <property name="top_attach">5</property>
+                <property name="bottom_attach">6</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label_recurrence">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">None</property>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">5</property>
+                <property name="bottom_attach">6</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label5">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Recurrence:</property>
+              </widget>
+              <packing>
+                <property name="top_attach">5</property>
+                <property name="bottom_attach">6</property>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
+              </packing>
             </child>
             <child>
               <widget class="GtkViewport" id="viewport3">
@@ -58,8 +100,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">4</property>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
+                <property name="top_attach">6</property>
+                <property name="bottom_attach">7</property>
               </packing>
             </child>
             <child>
@@ -79,8 +121,8 @@
                 <property name="label" translatable="yes" context="yes">Description:</property>
               </widget>
               <packing>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
+                <property name="top_attach">6</property>
+                <property name="bottom_attach">7</property>
                 <property name="x_options"></property>
                 <property name="y_options"></property>
               </packing>
@@ -148,8 +190,8 @@
               </widget>
               <packing>
                 <property name="right_attach">4</property>
-                <property name="top_attach">6</property>
-                <property name="bottom_attach">7</property>
+                <property name="top_attach">7</property>
+                <property name="bottom_attach">8</property>
                 <property name="y_options"></property>
               </packing>
             </child>
@@ -193,8 +235,8 @@
               </widget>
               <packing>
                 <property name="right_attach">4</property>
-                <property name="top_attach">7</property>
-                <property name="bottom_attach">8</property>
+                <property name="top_attach">8</property>
+                <property name="bottom_attach">9</property>
               </packing>
             </child>
             <child>

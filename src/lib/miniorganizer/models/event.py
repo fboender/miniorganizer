@@ -19,6 +19,7 @@ import datetime
 import icalendar
 from kiwi.model import Model
 from alarm import AlarmModel
+from copy import copy
 
 class EventModel(Model):
 	
@@ -113,6 +114,12 @@ class EventModel(Model):
 	def get_related_to(self):
 		return(self.__vevent.get('REALTED-TO', None))
 			
+	def get_recur(self):
+		return(self.__vevent.get('RRULE', None))
+
+	def set_recur(self, recur):
+		self.__vevent.set('RRULE', recur)
+		
 	def __cmp__(self, x):
 		if not isinstance(x, EventModel):
 			return(-1)
@@ -126,3 +133,8 @@ class EventModel(Model):
 			return(-1)
 		else:
 			return(0)
+
+	def dup(self):
+		vevent = copy(self.__vevent)
+		event = self.mo.factory.eventFromVComponent(vevent)
+		return(event)
