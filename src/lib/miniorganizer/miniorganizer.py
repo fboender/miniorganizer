@@ -143,7 +143,7 @@ class MiniOrganizer:
 
 	def getRecurEvents(self, dtstart, dtend):
 		"""
-		Return a list of fake the events, and also generate 'fake' events for
+		Return a list of fake events, and also generate 'fake' events for
 		recurring events.
 		"""
 		events = []
