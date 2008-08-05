@@ -1,5 +1,6 @@
 Component           Todo
 ------------------+----------------------------------------------------------------------
+miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
 miniorganizer       Refactor models.
 miniorganizer       Cancelling the editing of an event/todo still adds (maybe modifies too?) the event/todo.
 miniorganizer       When loading a ical that contains errors (empty), program crashes.
