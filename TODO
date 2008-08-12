@@ -1,5 +1,6 @@
 Component           Todo
 ------------------+----------------------------------------------------------------------
+miniorganizer       Auto-save doesn't work.
 miniorganizer       Changes have not been saved!
 miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
 miniorganizer       Refactor models.
@@ -20,3 +21,4 @@ miniorganizer       Under a raw installation of Debian (4.0), miniorganizer repo
 miniorganizer       An event which is a whole day event, and which runs from 06/13/08 to 06/16/08 doesn't appear in the calendar on the 16th (because it ends on 06/16/08 at 00:00).
 notifier            Automatic forking in background.
 notifier            Add hour snooze.
+alarms              Allow the user to specify an actual date/time on which the alarm should trigger and automatically convert it to a time offset.
