@@ -4,6 +4,10 @@ INSTALLDIR='/usr/local/lib/miniorganizer'
 BINDIR='/usr/local/bin'
 MENUDIR='/usr/local/share/applications/'
 
+#
+# Do some checks to make sure we can install Miniorganizer on the system and
+# actually run it.
+#
 if [ ! -d 'bin' -o ! -d 'docs' ]; then
 	echo "'bin' or 'docs' directory does not exist. Can't install. Aborting..."
 	exit 1
@@ -14,8 +18,17 @@ if [ `whoami` != 'root' ]; then
 	exit 2
 fi
 
+python -c "import dateutil" 2>/dev/null
+if [ "$?" -eq '1' ]; then
+	echo "You don't have the python package 'dateutil' installed. Please install it."
+	exit 3
+fi
+
+#
+# Install Miniorganizer
+#
 echo "Installing MiniOrganizer in $INSTALLDIR"
-mkdir -p '$INSTALLDIR'
+mkdir -p $INSTALLDIR
 cp -ar bin $INSTALLDIR
 cp -ar docs $INSTALLDIR
 
