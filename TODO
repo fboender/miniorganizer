@@ -1,8 +1,6 @@
 Component           Todo
 ------------------+----------------------------------------------------------------------
 install             README in root dir of archive.
-install             miniorganizer-alarm.desktop missing.
-install             Install should check for python libs.
 miniorganizer       Auto-save doesn't work.
 miniorganizer       Changes have not been saved!
 miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
