@@ -24,6 +24,7 @@ cp data/install.sh releases/miniorganizer-$VERSION/
 cp data/uninstall.sh releases/miniorganizer-$VERSION/ 
 cp docs/userguide/userguide.html releases/miniorganizer-$VERSION/docs/
 cp data/desktop/miniorganizer.desktop releases/miniorganizer-$VERSION/desktop
+cp data/desktop/miniorganizer-alarm.desktop releases/miniorganizer-$VERSION/desktop
 
 # Remove unneeded stuff from the release dir
 find ./releases/miniorganizer-$VERSION/ -name ".svn" -type d -print0 | xargs -0 /bin/rm -rf
