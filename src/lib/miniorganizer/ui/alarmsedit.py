@@ -39,8 +39,9 @@ class AlarmsEditUI(ListContainer):
 		delta = datetime.timedelta()
 		alarm = self.mo.factory.alarm(delta, self.parent_model)
 		alarm = miniorganizer.ui.AlarmEditUI(self.mo, alarm).run()
-		self.alarms.append(alarm)
-		self.listcontainer_alarms.add_item(alarm)
+		if alarm:
+			self.alarms.append(alarm)
+			self.listcontainer_alarms.add_item(alarm)
 
 	def listcontainer__remove_item(self, listcontainer, alarm):
 		self.alarms.remove(alarm)
