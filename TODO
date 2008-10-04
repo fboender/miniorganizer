@@ -1,14 +1,11 @@
 Component           Todo
 ------------------+----------------------------------------------------------------------
 install             README in root dir of archive.
+miniorganizer       Cancelling the editing of an event/todo still adds (maybe modifies too?) the event/todo.
 miniorganizer       Manual page.
-miniorganizer       Auto-save doesn't work.
-miniorganizer       Changes have not been saved!
 miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
 miniorganizer       Refactor models.
-miniorganizer       Cancelling the editing of an event/todo still adds (maybe modifies too?) the event/todo.
 miniorganizer       When loading a ical that contains errors (empty), program crashes.
-miniorganizer       Warn on unsaved changes.
 event               Double click on day == add new event.
 event               Right click on day == popup menu.
 miniorganizer       Right click on event/todo == popup menu.

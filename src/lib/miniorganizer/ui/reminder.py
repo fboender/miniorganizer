@@ -30,6 +30,10 @@ class ReminderUI(GladeDelegate):
 
 		label_text = "<b>%s</b>\n%s" % (event.get_summary(), event.get_description())
 		GladeDelegate.__init__(self, gladefile="mo_reminder", toplevel_name='dialog_main')
+		self.get_toplevel().set_modal(True)
+		self.get_toplevel().stick()
+		self.get_toplevel().set_keep_above(True)
+
 		self.entry_snoozetime.set_text(str(mo.config['reminder.default_snooze']))
 		self.label_summary.set_label('<span size=\'large\'><b>%s</b></span>' % (event.get_summary()))
 		self.label_from.set_text(event.get_start().ctime())
