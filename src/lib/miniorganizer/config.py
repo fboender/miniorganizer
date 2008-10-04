@@ -55,6 +55,38 @@ class Config(dict):
 		else:
 			return(dict.__getitem__(self, k))
 
+	def _cast_mem(self, k, v):
+		"""
+		Cast a value to the correct type for use in memory according to the
+		type defined in self.defaults.
+		"""
+		if k in self.defaults:
+			type_, default = self.defaults[k]
+			if type_ == bool:
+				return(bool(int(v)))
+			elif type_ == int:
+				return(int(v))
+			else:
+				return(v)
+		else:
+			return(v)
+	
+	def _cast_file(self, k, v):
+		"""
+		Cast a value to the correct type for use on disk according to the type
+		defined in self.defaults.
+		"""
+		if k in self.defaults:
+			type_, default = self.defaults[k]
+			if type_ == bool:
+				return(int(v))
+			elif type_ == int:
+				return(int(v))
+			else:
+				return(v)
+		else:
+			return(v)
+
 	def update(self, E):
 		"""
 		Update the configuration from a configuration file or dictionary.
@@ -71,14 +103,7 @@ class Config(dict):
 			for line in f:
 				if line and not line.startswith('#') and '=' in line:
 					k, v = [x.strip() for x in line.split('=', 1)]
-					# Cast if needed
-					if k in self.defaults:
-						type_, default = self.defaults[k]
-						if type_ == bool:
-							v = bool(int(v))
-						elif type_ == int:
-							v = int(v)
-					self.__setitem__(k, v)
+					self.__setitem__(k, self._cast_mem(k, v))
 			f.close()
 
 	def save(self, filename = None):
@@ -104,17 +129,14 @@ class Config(dict):
 				k, v = [x.strip() for x in line.split('=', 1)]
 				seen_keys.append(k)
 				if k in self:
-					current_v = self[k]
+					# Key is set in in-memory configuration. Replace file value with memory value.
+					v = self[k]
 					if k in self.defaults:
-						type_, default = self.defaults[k]
-						if type_ == bool:
-							current_v = int(current_v)
-						elif type_ == int:
-							current_v = int(current_v)
-					fc.append('%s = %s\n' % (k,current_v))
+						v = self._cast_file(k, v)
+					fc.append('%s = %s\n' % (k, v))
 				else:
+					# Key is not set in in-memory configuration. Just keep file version.
 					fc.append(line)
-				
 			else:
 				# Line doesn't contain a configuration item. Just keep it.
 				fc.append(line)
@@ -122,7 +144,7 @@ class Config(dict):
 		# Add any config items which are new to the file
 		for k in self.keys():
 			if not k in seen_keys:
-				fc.append('%s = %s\n' % (k, self[k]))
+				fc.append('%s = %s\n' % (k, self._cast_file(k, self[k])))
 				
 		f_in.close()
 		

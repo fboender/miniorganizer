@@ -59,15 +59,14 @@ class MiniOrganizer:
 			'reminder.lastseen': (int, time.time()),
 			'reminder.default_snooze': (int, 10),
 			'events.default_show': (str, 'Month'),
-			'events.cal_show_weeknr': (bool, 1),
-			'miniorganizer.auto_save': (bool, 1),
+			'events.cal_show_weeknr': (bool, True),
+			'miniorganizer.auto_save': (bool, True),
 		}
 		self.config = config.Config(self.conffile, defaults=config_defaults)
 		self.first_time = False
 
 		if calfile:
-			self.calfile = calfile
-			self.config['miniorganizer.auto_save'] = False
+			self.load(calfile)
 		else:
 			self.calfile = os.path.join(self.confdir, 'miniorganizer.ics')
 
@@ -99,7 +98,6 @@ class MiniOrganizer:
 
 		self.calfile = calfile
 		self.config['miniorganizer.auto_save'] = False
-
 		self.modified = False
 
 	def reload(self):
