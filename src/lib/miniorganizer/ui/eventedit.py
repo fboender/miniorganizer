@@ -60,8 +60,10 @@ class EventEditUI(GladeDelegate):
 		if rrule:
 			self.label_recurrence.set_text(rrule['FREQ'][0].capitalize())
 
+	def run(self):
 		self.show_all()
 		gtk.main()
+		return(self.event)
 
 	def dateedit_start__changed(self, *args):
 		if not self.end_changed:
@@ -130,6 +132,7 @@ class EventEditUI(GladeDelegate):
 		self.quit()
 	
 	def on_button_cancel__clicked(self, *args):
+		self.event = None
 		self.quit()
 
 	def on_dialog_main__delete_event(self, *args):

@@ -1,7 +1,7 @@
 Component           Todo
 ------------------+----------------------------------------------------------------------
 install             README in root dir of archive.
-miniorganizer       Cancelling the editing of an event/todo still adds (maybe modifies too?) the event/todo.
+miniorganizer       Modifying an event (todo too?) doesn't signal that the calendar has changed.
 miniorganizer       Manual page.
 miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
 miniorganizer       Refactor models.

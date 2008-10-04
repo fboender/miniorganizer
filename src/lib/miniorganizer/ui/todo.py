@@ -60,7 +60,8 @@ class TodoUI(GladeSlaveDelegate):
 
 	def on_toolbutton_add__clicked(self, *args):
 		todo = self.mo.factory.todo()
-		if miniorganizer.ui.TodoEditUI(self.mo, todo):
+		todo = miniorganizer.ui.TodoEditUI(self.mo, todo).run()
+		if todo:
 			self.mo.add(todo)
 			self.treeview_todo.append(None, todo)
 			self.parent.menuitem_save.set_sensitive(True)
@@ -98,7 +99,7 @@ class TodoUI(GladeSlaveDelegate):
 		self.toolbutton_edit.set_sensitive(has_selection)
 	
 	def treeview_todo__row_activated(self, list, object):
-		miniorganizer.ui.TodoEditUI(self.mo, object)
+		miniorganizer.ui.TodoEditUI(self.mo, object).run()
 		self.parent.menuitem_save.set_sensitive(True)
 	
 	def treeview_todo__key_press_event(self, treeview, event):

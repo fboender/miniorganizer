@@ -52,10 +52,6 @@ class AlarmEditUI(GladeDelegate):
 		gtk.main()
 		return(self.alarm)
 
-	def quit(self):
-		self.view.hide()
-		gtk.main_quit()
-
 	def trigger_on_update(self, *args):
 		try:
 			delta = datetime.timedelta(
@@ -76,3 +72,8 @@ class AlarmEditUI(GladeDelegate):
 		self.alarm.set_delta(self.old_delta)
 		self.alarm = None
 		self.quit()
+
+	def quit(self):
+		self.view.hide()
+		gtk.main_quit()
+

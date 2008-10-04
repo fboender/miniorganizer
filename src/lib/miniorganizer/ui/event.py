@@ -77,7 +77,8 @@ class EventUI(GladeSlaveDelegate):
 		end = start + datetime.timedelta(hours=+1)
 
 		event = self.mo.factory.event(start, end)
-		if miniorganizer.ui.EventEditUI(self.mo, event):
+		event = miniorganizer.ui.EventEditUI(self.mo, event).run()
+		if event:
 			self.mo.add(event)
 			self.treeview_event.append(None, event)
 			self.on_calendar__month_changed(self.calendar)
@@ -235,9 +236,10 @@ class EventUI(GladeSlaveDelegate):
 					self.treeview_event.remove(event)
 		
 	def treeview_event__row_activated(self, list, object):
+		# FIXME: This might be more complicated than it needs to be. See todo.py's row_activated.
 		sel_event = self.treeview_event.get_selected()
 		sel_event = getattr(sel_event, 'real_event', sel_event) # Edit real event instead of recurring event
-		miniorganizer.ui.EventEditUI(self.mo, sel_event)
+		result = miniorganizer.ui.EventEditUI(self.mo, sel_event).run()
 		self.on_calendar__month_changed(self.calendar)
 		self.on_calendar__day_selected(self.calendar)
 		if sel_event in self.treeview_event:

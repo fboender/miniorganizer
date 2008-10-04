@@ -52,8 +52,10 @@ class TodoEditUI(GladeDelegate):
 			self.checkbutton_due.set_active(False)
 		self.on_checkbutton_due__toggled(self.checkbutton_due)
 
+	def run(self):
 		self.show_all()
 		gtk.main()
+		return(self.todo)
 
 	def dateedit_due__changed(self, dateedit_due, dt):
 		self.todo.set_due(dt)
@@ -98,6 +100,7 @@ class TodoEditUI(GladeDelegate):
 		self.quit()
 	
 	def on_button_cancel__clicked(self, *args):
+		self.todo = None
 		self.quit()
 
 	def on_dialog_main__delete_event(self, *args):
