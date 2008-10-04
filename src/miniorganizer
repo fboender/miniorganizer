@@ -110,4 +110,5 @@ if __name__ == "__main__":
 		mo_ui = miniorganizer.ui.MiniOrganizerUI(mo)
 	
 	if mo.config['miniorganizer.auto_save']:
+		log.debug("Auto saving.")
 		mo.save()

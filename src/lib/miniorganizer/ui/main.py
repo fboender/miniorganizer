@@ -52,7 +52,7 @@ class MiniOrganizerUI(GladeDelegate):
 		gtk.main()
 
 	def on_window_main__delete_event(self, *args):
-		self.quit()
+		return self.quit()
 		
 	def on_menuitem_new__activate(self, *args):
 		self.mo.clear()
@@ -96,6 +96,10 @@ class MiniOrganizerUI(GladeDelegate):
 		miniorganizer.ui.AboutUI()
 
 	def quit(self):
+		if self.mo.modified:
+			response = dialogs.yesno('You have unsaved changes in this calendar. Are you sure you want to quit?')
+			if response == gtk.RESPONSE_NO:
+				return True
 		self.view.hide()
 		gtk.main_quit()
 
