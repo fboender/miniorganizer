@@ -25,11 +25,12 @@ Features
 
 MiniOrganizer currently features:
 
-* Appointments.
+* One-time and recurring appointments.
 * Hierarchical Todos.
 * Multiple alarms per appointment and todo.
-* Alarm notification.
+* Alarm notification with snooze.
 * (Gnome) Panel docking.
+* Uses universal iCalendar files as storage format.
 
 Intended features
 ~~~~~~~~~~~~~~~~~
