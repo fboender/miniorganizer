@@ -22,6 +22,7 @@ import miniorganizer.ui
 from dateutil.relativedelta import relativedelta
 from kiwi.ui.delegates import GladeSlaveDelegate
 from kiwi.ui.objectlist import ObjectTree, Column, ColoredColumn
+from kiwi.ui import dialogs
 from miniorganizer.models import Factory
 
 class EventUI(GladeSlaveDelegate):
@@ -88,6 +89,15 @@ class EventUI(GladeSlaveDelegate):
 
 	def on_toolbutton_remove__clicked(self, *args):
 		sel_event = self.treeview_event.get_selected()
+		sel_real_event = getattr(sel_event, 'real_event', sel_event) # Delete real event instead of recurring event
+
+		if sel_event != sel_real_event:
+			response = dialogs.yesno('This is a recurring event. Deleting it will delete all recurrences. Are you sure you want to delete it?')
+			if response == gtk.RESPONSE_NO:
+				return
+			else:
+				sel_event = sel_real_event
+
 		if sel_event:
 			self.mo.cal_model.delete(sel_event)
 			self.treeview_event.remove(sel_event)

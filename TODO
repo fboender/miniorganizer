@@ -1,25 +1,29 @@
+Bugs
+====
+
+Component           Todo
+------------------+----------------------------------------------------------------------
+miniorganizer       Can't disable recurrence once it's turned on.
+miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
+miniorganizer       Inputting a from/to date of 05-23-08 21:00 to 05-24-08 00:00 makes the duration 1 day, hours (should be 3 hours). Does work when entering 00:01
+miniorganizer       Under a raw installation of Debian (4.0), miniorganizer reports various bugs. Fix these.
+miniorganizer       An event which is a whole day event, and which runs from 06/13/08 to 06/16/08 doesn't appear in the calendar on the 16th (because it ends on 06/16/08 at 00:00).
+
+Features
+========
+
 Component           Todo
 ------------------+----------------------------------------------------------------------
 install             README in root dir of archive.
-miniorganizer       Modifying an event (todo too?) doesn't signal that the calendar has changed.
-miniorganizer       Can't disable recurrence once it's turned on.
-miniorganizer       Removing an recurring event by deleting a recurrence of the event crashes with the message ValueError: list.remove(x): x not in list
 miniorganizer       Manual page.
-miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
-miniorganizer       Refactor models.
-miniorganizer       When loading a ical that contains errors (empty), program crashes.
 event               Double click on day == add new event.
 event               Right click on day == popup menu.
 miniorganizer       Right click on event/todo == popup menu.
-event               When adding a new alarm to an event and then canceling the alarm and then pressing 'ok' an error occurs.
 event               Recurring events.
 todo                Composite todo's.
 todo                Show percentage complete (or progressbar) for composite and normal todos.
-miniorganizer       Inputting a from/to date of 05-23-08 21:00 to 05-24-08 00:00 makes the duration 1 day, hours (should be 3 hours). Does work when entering 00:01
 miniorganizer       RadioButton errors.
 miniorganizer       Implement notes
-miniorganizer       Under a raw installation of Debian (4.0), miniorganizer reports various bugs. Fix these.
-miniorganizer       An event which is a whole day event, and which runs from 06/13/08 to 06/16/08 doesn't appear in the calendar on the 16th (because it ends on 06/16/08 at 00:00).
 notifier            Automatic forking in background.
 notifier            Add hour snooze.
 alarms              Allow the user to specify an actual date/time on which the alarm should trigger and automatically convert it to a time offset.
