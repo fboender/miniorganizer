@@ -96,7 +96,7 @@ class TodoEditUI(GladeDelegate):
 		self.todo.set_summary(self.summary.get_text())
 		self.todo.set_priority(int(self.priority.get_value()))
 		self.todo.set_description(description)
-			
+
 		self.quit()
 	
 	def on_button_cancel__clicked(self, *args):

@@ -84,7 +84,7 @@ if __name__ == "__main__":
 	log = logging.getLogger('MINICAL')
 	log.setLevel(options.debug)
 	log.addHandler(logging.StreamHandler())
-	log.addHandler(logging.FileHandler(os.path.join(mo.confdir, 'miniorganizer.log')))
+	log.addHandler(logging.FileHandler(os.path.join(mo.conf_dir, 'miniorganizer.log')))
 
 	if gtk.check_version(2, 10, 0):
 		sys.stderr.write('MiniOrganizer requires at least GTK v2.10 or higher\n')

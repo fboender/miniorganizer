@@ -71,8 +71,8 @@ class AlarmNotifier(object):
 		# Load the alarms and filter out any that we've already alerted for. Then
 		# sort the alarms so we can alert for the one at the top.
 		alarms = []
-		for alarm in mo.getAlarms():
-			trigger_dt = alarm.get_parent().get_start() + alarm.get_delta()
+		for alarm in mo.cal_model.get_alarms():
+			trigger_dt = alarm.get_parent_model().get_start() + alarm.get_delta()
 			if trigger_dt >= self.lastseen:
 				alarms.append((trigger_dt, alarm))
 		for snooze in self.snoozes:
@@ -80,13 +80,13 @@ class AlarmNotifier(object):
 		alarms.sort()
 
 		for x in alarms:
-			self.log.debug('Alert for ical item \'%s\' at %s' % (x[1].get_parent().get_summary(), x[0]))
+			self.log.debug('Alert for ical item \'%s\' at %s' % (x[1].get_parent_model().get_summary(), x[0]))
 
 		return(alarms)
 		
 	def poll(self):
 		# Check if the calendar has changed
-		if mo.changed():
+		if mo.modified_ondisk():
 			self.log.debug('Reloading calendar')
 			mo.reload()
 			self.alarms = self.loadAlarms()
@@ -104,7 +104,7 @@ class AlarmNotifier(object):
 			trigger, alarm = self.alarms[0]
 			if trigger > self.lastseen and trigger < now:
 				self.alarms.pop(0)
-				reminder = miniorganizer.ui.ReminderUI(mo, alarm.get_parent())
+				reminder = miniorganizer.ui.ReminderUI(mo, alarm.get_parent_model())
 				snooze_delta = reminder.run()
 				if snooze_delta:
 					log.debug('Snoozing alarm for %s' % (snooze_delta))
@@ -141,8 +141,8 @@ if __name__ == '__main__':
 	log = logging.getLogger('MINICAL-ALARM')
 	log.setLevel(options.debug)
 	log.addHandler(logging.StreamHandler())
-	log.addHandler(logging.FileHandler(os.path.join(mo.confdir, 'miniorganizer.log')))
-	log.debug('Configuration directory = %s' % (mo.confdir))
+	log.addHandler(logging.FileHandler(os.path.join(mo.conf_dir, 'miniorganizer.log')))
+	log.debug('Configuration directory = %s' % (mo.conf_dir))
 
 	# Catch terminating and other signals so we can write out the last time we
 	# checked for alerts.

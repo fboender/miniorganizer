@@ -16,10 +16,11 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 from factory import Factory
+from calendar import CalendarModel
 from alarm import AlarmModel
 from event import EventModel
 from todo import TodoModel
 
 # Because we don't want to polute the namespace with stuff, delete some things
 # here.
-del factory, alarm, event, todo
+del factory, calendar, alarm, event, todo

@@ -16,26 +16,23 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import icalendar
-from kiwi.model import Model
+from base import BaseModel
 
-class AlarmModel(Model):
+class AlarmModel(BaseModel):
 
-	def __init__(self, mo, valarm, parent_model):
-		from event import EventModel
-		from todo import TodoModel
-		assert(isinstance(valarm, icalendar.cal.Alarm))
-		assert(isinstance(parent_model, EventModel) or isinstance(parent_model, TodoModel))
+	def __init__(self, valarm, parent_model):
+		BaseModel.__init__(self)
 
-		self.mo = mo
 		self.__valarm = valarm
 		self.__parent_model = parent_model
+		self.modified = False
 
 	def get_delta(self):
 		return(self.__valarm['TRIGGER'].dt)
 
 	def set_delta(self, delta):
 		self.__valarm.set('TRIGGER', delta)
+		self.modified = True
 
 	def get_offset(self):
 		delta = self.__valarm['TRIGGER'].dt
@@ -61,6 +58,7 @@ class AlarmModel(Model):
 			seconds=-(seconds),
 		)
 		self.__valarm.set('TRIGGER', delta)
+		self.modified = True
 
 	def get_offsetformat(self):
 		days, hours, minutes, seconds = self.get_offset()
@@ -84,7 +82,7 @@ class AlarmModel(Model):
 	def get_uid(self):
 		return(self.__valarm.get('UID', None))
 
-	def get_parent(self):
+	def get_parent_model(self):
 		return(self.__parent_model)
 
 	def __cmp__(self, x):

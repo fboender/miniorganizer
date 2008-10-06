@@ -15,61 +15,113 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
+# FIXME: This shouldn't be a class, or at least the methods should be static.
+# Now, all classes have to initialize this class first, which is rather
+# annoying.
+
 import datetime
 import icalendar
+from calendar import CalendarModel
 from event import EventModel
 from alarm import AlarmModel
 from todo import TodoModel
+from miniorganizer.tools import gen_uid
 
 class Factory():
-	def __init__(self, mo):
-		self.mo = mo
-	
+	"""
+	The model factory class provides a mechanism for creating new empty models
+	from scratch. It fills in the default required fields of the models if
+	needed.
+	"""
+	def __init__(self):
+		pass
+
+	def calendar(self):
+		"""
+		Create a new CalendarModel.
+		"""
+		vcalendar = icalendar.Calendar()
+		calendar_model = CalendarModel(vcalendar)
+		return(calendar_model)
+
+	def calendar_from_vcomponent(self, vcalendar):
+		calendar_model = CalendarModel(vcalendar)
+		return(calendar_model)
+
 	def event(self, start, end):
+		"""
+		Create a new EventModel. `start` and `end` are datetime values for the
+		DTSTART and DTEND field of the model.
+		"""
 		vevent = icalendar.Event()
-		vevent.set('UID', self.mo.genUID())
+		vevent.set('UID', gen_uid())
 		vevent.set('CREATED', datetime.datetime.now())
 		vevent.set('DTSTART', start)
 		vevent.set('DTEND', end)
-		event_model = EventModel(self.mo, vevent)
+		event_model = EventModel(vevent)
 		return(event_model)
 
-	def eventFromVComponent(self, vevent):
-		event_model = EventModel(self.mo, vevent)
+	#def event_from_vcomponent(self, vevent):
+	def event_from_vcomponent(self, vevent):
+		"""
+		Create a EventModel from a vEvent iCalendar component.
+		"""
+		event_model = EventModel(vevent)
 		return(event_model)
-
-	def alarm(self, delta, parent_model):
-		valarm = icalendar.Alarm()
-		valarm.set('UID', self.mo.genUID())
-		valarm.set('TRIGGER', delta)
-		valarm.set('ACTION', 'DISPLAY')
-		alarm_model = AlarmModel(self.mo, valarm, parent_model)
-		return(alarm_model)
-		
-	def alarmFromVComponent(self, valarm, parent_model):
-		alarm_model = AlarmModel(self.mo, valarm, parent_model)
-		return(alarm_model)
 
 	def todo(self, parent_model=None):
+		"""
+		Create a new TodoModel. `parent_model` is the parent TodoModel to which
+		this todo belongs.
+		"""
 		vtodo = icalendar.Todo()
-		vtodo.set('UID', self.mo.genUID())
+		vtodo.set('UID', gen_uid())
 		vtodo.set('CREATED', datetime.datetime.now())
 		vtodo.set('PERCENTAGE-COMPLETE', 0)
 		if parent_model:
 			vtodo.set('RELATED-TO', parent_model.get_uid())
-		todo_model = TodoModel(self.mo, vtodo)
+		todo_model = TodoModel(vtodo)
 		return(todo_model)
 
-	def todoFromVComponent(self, vtodo):
-		todo_model = TodoModel(self.mo, vtodo)
+	def todo_from_vcomponent(self, vtodo):
+		# FIXME: no parent_model?
+		todo_model = TodoModel(vtodo)
 		return(todo_model)
 		
-	def modelFromVComponent(self, vcomponent):
+	def alarm(self, delta, parent_model):
+		"""
+		Create a new AlarmModel. `delta` is a date/time offset as returned by
+		datetime.timedelta(). `parent_model` is the parent model to which this
+		alarm belongs, such as a EventModel or TodoModel.
+		"""
+		valarm = icalendar.Alarm()
+		valarm.set('UID', gen_uid())
+		valarm.set('TRIGGER', delta)
+		valarm.set('ACTION', 'DISPLAY')
+		alarm_model = AlarmModel(valarm, parent_model)
+		return(alarm_model)
+		
+	#def alarm_from_vcomponent(self, valarm, parent_model):
+	def alarm_from_vcomponent(self, valarm, parent_model):
+		"""
+		Create an AlarmModel from a vAlarm iCalendar component. `parent_model`
+		is the parent model to which this alarm belongs, such as an EventModel
+		or TodoModel.
+		"""
+		alarm_model = AlarmModel(valarm, parent_model)
+		return(alarm_model)
+
+	def model_from_vcomponent(self, vcomponent):
+		"""
+		Create a Model from a vComponent. Automatically guesses the type of the
+		vComponent (vEvent, vTodo, etc) and returns a EventModel, TodoModel,
+		etc created from the vComponent.
+		"""
 		if isinstance(vcomponent, icalendar.cal.Event):
-			return(self.eventFromVComponent(vcomponent))
+			return(self.event_from_vcomponent(vcomponent))
 		elif isinstance(vcomponent, icalendar.cal.Todo):
-			return(self.todoFromVComponent(vcomponent))
+			return(self.todo_from_vcomponent(vcomponent))
 		elif isinstance(vcomponent, icalendar.cal.Alarm):
-			return(self.alarmFromVComponent(vcomponent))
+			return(self.alarm_from_vcomponent(vcomponent))
 		else:
 			raise NotImplementedError('Component type \'%s\' is not supported yet.' % (type(vcomponent)))

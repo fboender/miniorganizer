@@ -16,15 +16,18 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import miniorganizer.models
 from kiwi.ui.objectlist import Column
 from kiwi.ui.listdialog import ListContainer
+from miniorganizer.models import Factory
+import miniorganizer.ui
 
 class AlarmsEditUI(ListContainer):
 	def __init__(self, mo, alarms = None, parent_model = None):
 		self.mo = mo
 		self.alarms = alarms
 		self.parent_model = parent_model
+		self.factory = Factory()
+
 		columns = [
 			Column("offsetformat", title='Offset'),
 			Column("type", title='Type')
@@ -37,7 +40,7 @@ class AlarmsEditUI(ListContainer):
 
 	def listcontainer__add_item(self, *args):
 		delta = datetime.timedelta()
-		alarm = self.mo.factory.alarm(delta, self.parent_model)
+		alarm = self.factory.alarm(delta, self.parent_model)
 		alarm = miniorganizer.ui.AlarmEditUI(self.mo, alarm).run()
 		if alarm:
 			self.alarms.append(alarm)

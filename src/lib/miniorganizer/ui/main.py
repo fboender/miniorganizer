@@ -44,7 +44,6 @@ class MiniOrganizerUI(GladeDelegate):
 		if mo.first_time:
 			dialogs.warning('This version of MiniOrganizer is still in development. Even though it works, and can be used in everyday life, there may still be bugs in it.\n\nIf you notice such a bug, or see anything else you would like to see changed or added, please contact the author. Your feedback is greatly appreciated.');
 
-		self.menuitem_save.set_sensitive(False)
 		self.menuitem_cut.set_sensitive(False)
 		self.menuitem_copy.set_sensitive(False)
 		self.menuitem_paste.set_sensitive(False)
@@ -68,7 +67,7 @@ class MiniOrganizerUI(GladeDelegate):
 		self.menuitem_save.set_sensitive(False)
 
 	def on_menuitem_save__activate(self, *args):
-		if self.mo.calfile:
+		if self.mo.cal_fname:
 			self.mo.save()
 			self.menuitem_save.set_sensitive(False)
 		else:
@@ -96,7 +95,7 @@ class MiniOrganizerUI(GladeDelegate):
 		miniorganizer.ui.AboutUI()
 
 	def quit(self):
-		if self.mo.modified:
+		if not self.mo.config['miniorganizer.auto_save'] and self.mo.cal_model.modified_inmem():
 			response = dialogs.yesno('You have unsaved changes in this calendar. Are you sure you want to quit?')
 			if response == gtk.RESPONSE_NO:
 				return True

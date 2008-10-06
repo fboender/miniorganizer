@@ -18,17 +18,14 @@
 import os
 import logging
 import stat
-import string
 import datetime
-import time
-import random
 import icalendar
 import config
-from models import Factory
-from socket import gethostname
-from models import AlarmModel, TodoModel, EventModel, Factory
+import time
+from models import Factory, AlarmModel, TodoModel, EventModel, CalendarModel
 from dateutil import rrule
 import copy
+from kiwi.ui import dialogs
 
 class MiniOrganizer:
 	"""
@@ -37,21 +34,23 @@ class MiniOrganizer:
 	through this class.
 	"""
 	
-	def __init__(self, calfile = None):
+	def __init__(self, cal_fname = None):
 		self.log = logging.getLogger('MINICAL')
+		self.factory = Factory()
 
-		self.__models = []
-		self.factory = Factory(self)
-		self.calendar = icalendar.Calendar()
+		self.cal_modified = False
+		self.cal_mtime = 0
+		self.cal_fname = None
+		self.cal_model = None
 		self.homedir = os.environ['HOME']
-		self.confdir = os.path.join(self.homedir, '.miniorganizer')
-		self.conffile = os.path.join(self.confdir, 'miniorganizer.ini')
+		self.conf_dir = os.path.join(self.homedir, '.miniorganizer')
+		self.conf_fname = os.path.join(self.conf_dir, 'miniorganizer.ini')
 
-		if not os.path.exists(self.confdir):
+		if not os.path.exists(self.conf_dir):
 			self.first_time = True
-			os.mkdir(self.confdir)
-		if not os.path.exists(self.conffile):
-			f = file(self.conffile, 'w')
+			os.mkdir(self.conf_dir)
+		if not os.path.exists(self.conf_fname):
+			f = file(self.conf_fname, 'w')
 			f.close()
 
 		config_defaults = {
@@ -62,205 +61,88 @@ class MiniOrganizer:
 			'events.cal_show_weeknr': (bool, True),
 			'miniorganizer.auto_save': (bool, True),
 		}
-		self.config = config.Config(self.conffile, defaults=config_defaults)
+		self.config = config.Config(self.conf_fname, defaults=config_defaults)
 		self.first_time = False
 
-		if calfile:
-			self.load(calfile)
+		# Load a given calendar or create a new empty one
+		if cal_fname:
+			self.cal_fname = cal_fname
+			self.load(self.cal_fname)
 		else:
-			self.calfile = os.path.join(self.confdir, 'miniorganizer.ics')
-
-		if os.path.exists(self.calfile):
-			self.load(self.calfile)
-
-		self.modified = False
+			self.cal_fname = os.path.join(self.conf_dir, 'miniorganizer.ics')
+			try:
+				self.load(self.cal_fname)
+			except IOError, e:
+				self.new()
 
 	def clear(self):
-		del self.__models[:]
-		self.calendar = icalendar.Calendar()
-		self.calfile = None
-		self.modified = True
-		# FIXME: Change mtime
+		raise NotImplementedError()
 		
-	def load(self, calfile):
-		self.clear()
+	def new(self):
+		self.log.debug('Creating new iCal file.')
+		self.cal_model = self.factory.calendar()
+		self.cal_modified = False
+		
+	def load(self, cal_fname):
+		self.log.debug('Loading iCal file \'%s\'.' % (cal_fname))
 
-		self.mtime = os.stat(calfile)[stat.ST_CTIME]
-		self.log.debug('Loading iCal file \'%s\'.' % (calfile))
-		f = file(calfile, 'r')
+		cal_mtime = os.stat(cal_fname)[stat.ST_CTIME]
+		f = file(cal_fname, 'r')
 		contents = f.read()
 		f.close()
 
-		self.calendar = icalendar.Calendar.from_string(contents)
-		
-		for item in self.calendar.subcomponents:
-			self.__models.append(self.factory.modelFromVComponent(item))
+		try:
+			cal_model = CalendarModel(icalendar.Calendar.from_string(contents))
 
-		self.calfile = calfile
-		self.config['miniorganizer.auto_save'] = False
-		self.modified = False
-
+			self.cal_mtime = cal_mtime
+			self.cal_model = cal_model
+			self.cal_modified = False
+		except ValueError, e:
+			dialogs.error('Error in calendar file', str(e))
+			
 	def reload(self):
-		del self.__models[:]
-		self.load(self.calfile)
+		#del self.__models[:]
+		self.load(self.cal_fname)
 
 	def save(self, filename = None):
-		self.log.debug('Saving calendar \'%s\'' % (self.calfile))
+		self.log.debug('Saving calendar \'%s\'' % (self.cal_fname))
 
 		if filename:
 			# Save As..
 			f = file(filename, 'w')
-			f.write(self.calendar.as_string())
+			#f.write(self.calendar.as_string())
+			f.write(self.cal_model.get_vcalendar().as_string())
 			f.close()
 
-			self.calfile = filename
-		elif self.calfile:
+			self.cal_fname = filename
+		elif self.cal_fname:
 			# Save..
-			f = file(self.calfile, 'w')
-			f.write(self.calendar.as_string())
+			f = file(self.cal_fname, 'w')
+			#f.write(self.calendar.as_string())
+			f.write(self.cal_model.get_vcalendar().as_string())
 			f.close()
 		else:
 			raise Exception('No filename specified')
 
-		self.modified = False
+		self.cal_modified = False
 
-	def import_(self, calfile):
-		f = file(calfile, 'r')
+	def import_(self, cal_fname):
+		f = file(cal_fname, 'r')
 		contents = f.read()
 		f.close()
 
 		calendar = icalendar.Calendar.from_string(contents)
 		for item in calendar.subcomponents:
-			model = self.factory.modelFromVComponent(item)
-			self.add(model)
+			model = self.factory.model_from_vcomponent(item)
+			self.calendarModel.add(model)
 
-		self.modified = True
+		self.cal_modified = True
 		
-	def getEvents(self):
-		return([model for model in self.__models if isinstance(model, EventModel)])
-
-	def getRecurEvents(self, dtstart, dtend):
-		"""
-		Return a list of fake events, and also generate 'fake' events for
-		recurring events.
-		"""
-		events = []
-		for model in self.__models:
-			if isinstance(model, EventModel):
-				recur = model.get_recur()
-				if recur:
-					freq = getattr(rrule, recur['FREQ'][0])
-					interval = int(recur['INTERVAL'][0])
-					paramdict = {
-						'freq': freq,
-						'dtstart': model.get_start(),
-						'interval': interval,
-						'until': dtend
-					}
-					if recur['FREQ'] == ['WEEKLY'] and 'BYDAY' in recur:
-						paramdict['byweekday'] = [getattr(rrule, weekday) for weekday in recur['BYDAY']]
-					if (recur['FREQ'] == ['MONTHLY'] or recur['FREQ'] == ['YEARLY']) and 'BYDAY' in recur:
-						m = re.match('(-?\d+)(.*)', recur['BYDAY'][0])
-						bd_index = int(m.groups()[0]) - 1
-						if bd_index >= 0:
-							bd_index += 1
-						paramdict['bysetpos'] = bd_index
-						paramdict['byweekday'] = getattr(rrule, m.groups()[1])
-					if 'BYMONTHDAY' in recur:
-						paramdict['bymonthday'] = int(recur['BYMONTHDAY'][0])
-					if 'BYMONTH' in recur:
-						paramdict['bymonth'] = int(recur['BYMONTH'][0])
-					if 'BYYEARDAY' in recur:
-						paramdict['byyearday'] = int(recur['BYYEARDAY'][0])
-
-					# Generate a list of dates on which this event recurs. Then
-					# create fake events which are duplicates of this event so
-					# that they can easily be displayed in the calendar, etc.
-					irrule = rrule.rrule(**paramdict)
-					if model.get_start() > dtstart:
-						recur_dates = irrule.between(model.get_start(), dtend, inc=False)
-					else:
-						recur_dates = irrule.between(dtstart, dtend, inc=False)
-
-					for date in recur_dates:
-						event_start = model.get_start()
-						event_end = model.get_end()
-
-						fakeevent = model.dup()
-						fakeevent.real_event = model # Mark this as a fake (recurring) event instance
-						fakeevent.set_start(date)
-						fakeevent.set_end(date + (event_end - event_start))
-
-						events.append(fakeevent)
-		return(events)
-
-	def getTodos(self):
-		return([model for model in self.__models if isinstance(model, TodoModel)])
-
-	def getAlarms(self):
-		alarms = []
-		for model in self.__models:
-			if hasattr(model, 'get_alarms'):
-				alarms.extend(model.get_alarms())
-		return(alarms)
-		
-	def getComponentByUID(self, uid):
-		for model in self.__models:
-			if model.get_uid() == uid:
-				return(model)
-		return(None)
-
-	def getRelatedComponents(self, uid):
-		components = []
-		for component in self.__models:
-			if component.get_related_to() == uid:
-				components.append(component)
-		return(components)
-
-	def delete(self, model):
-		"""
-		Remove a component from the calendar.
-		"""
-		self.calendar.subcomponents.remove(model.get_vcomponent())
-		self.__models.remove(model)
-		self.modified = True
-
-	def delRelatedTo(self, component):
-		"""
-		Remove a iCal component and all the items that relate to this component
-		recursively.
-		"""
-		components = [component]
-		while components:
-			components.extend(self.getRelatedComponents(components[0].get_uid()))
-			self.delete(components.pop(0))
-		self.modified = True
-
-	def add(self, model):
-		"""
-		Add a component to the calendar.
-		"""
-		self.calendar.add_component(model.get_vcomponent())
-		self.__models.append(model)
-		self.modified = True
-
-	def changed(self):
+	def modified_ondisk(self):
 		"""
 		Return True if the calendar has changed on disk since it's last been
 		read. False if it hasn't.
 		"""
-		mtime = os.stat(self.calfile)[stat.ST_CTIME]
-		return(mtime > self.mtime)
-
-	@staticmethod
-	def genUID():
-		"""
-		Generate a unique random UID that can be used to uniquely identify
-		iCalendar components.
-		"""
-		chars = list(string.ascii_letters + string.digits)
-		uid = time.strftime('%Y%m%dT%H%M%SZ-')
-		uid += ''.join([random.choice(chars) for i in range(16)])
-		uid += '@' + gethostname()
-		return(uid)
+		cal_mtime = os.stat(self.cal_fname)[stat.ST_CTIME]
+		return(cal_mtime > self.cal_mtime)
 

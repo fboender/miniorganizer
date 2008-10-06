@@ -17,19 +17,18 @@
 
 import datetime
 import gtk
-import icalendar
 import miniorganizer.ui
-import miniorganizer.models
 from kiwi.ui.delegates import GladeSlaveDelegate
 from kiwi.ui.objectlist import ObjectTree, Column, ColoredColumn
 from kiwi.ui import dialogs
-import pdb
+from miniorganizer.models import Factory
 
 class TodoUI(GladeSlaveDelegate):
 	
 	def __init__(self, parent, mo):
 		self.parent = parent
 		self.mo = mo
+		self.factory = Factory()
 
 		GladeSlaveDelegate.__init__(self, gladefile="mo_tab_todo", toplevel_name="window_main")
 
@@ -50,8 +49,9 @@ class TodoUI(GladeSlaveDelegate):
 		self.treeview_todo.connect('key-press-event', self.treeview_todo__key_press_event)
 
 		# Fill the user interface with information
-		for todo in self.mo.getTodos():
-			self.treeview_todo.append(todo.get_parent(), todo)
+		for todo in self.mo.cal_model.get_todos():
+			parent = self.mo.cal_model.get_model_by_uid(todo.get_related_to())
+			self.treeview_todo.append(parent, todo)
 	
 	def color_due(self, value):
 		if not value:
@@ -59,10 +59,10 @@ class TodoUI(GladeSlaveDelegate):
 		return(value < datetime.datetime.now())
 
 	def on_toolbutton_add__clicked(self, *args):
-		todo = self.mo.factory.todo()
+		todo = self.factory.todo()
 		todo = miniorganizer.ui.TodoEditUI(self.mo, todo).run()
 		if todo:
-			self.mo.add(todo)
+			self.mo.cal_model.add(todo)
 			self.treeview_todo.append(None, todo)
 			self.parent.menuitem_save.set_sensitive(True)
 
@@ -72,7 +72,7 @@ class TodoUI(GladeSlaveDelegate):
 
 	def on_toolbutton_remove__clicked(self, *args):
 		todo = self.treeview_todo.get_selected()
-		children = todo.get_children()
+		children = self.mo.cal_model.get_models_related_by_uid(todo.get_related_to())
 
 		if children:
 			response = dialogs.warning('This Todo contains sub-todos. Removing it will also remove the sub-todos. Is this what you want?', buttons=gtk.BUTTONS_YES_NO)
@@ -80,14 +80,14 @@ class TodoUI(GladeSlaveDelegate):
 				return
 
 		self.treeview_todo.remove(todo, True)
-		self.mo.delRelatedTo(todo)
+		self.mo.cal_model.delete(todo, True)
 		self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_addsub__clicked(self, *args):
 		parent_todo = self.treeview_todo.get_selected()
-		todo = self.mo.factory.todo(parent_todo)
+		todo = self.factory.todo(parent_todo)
 		if miniorganizer.ui.TodoEditUI(self.mo, todo):
-			self.mo.add(todo)
+			self.mo.cal_model.add(todo)
 			self.treeview_todo.append(parent_todo, todo)
 			self.treeview_todo.expand(parent_todo)
 			self.parent.menuitem_save.set_sensitive(True)
@@ -99,7 +99,7 @@ class TodoUI(GladeSlaveDelegate):
 		self.toolbutton_edit.set_sensitive(has_selection)
 	
 	def treeview_todo__row_activated(self, list, object):
-		miniorganizer.ui.TodoEditUI(self.mo, object).run()
+		todo = miniorganizer.ui.TodoEditUI(self.mo, object).run()
 		self.parent.menuitem_save.set_sensitive(True)
 	
 	def treeview_todo__key_press_event(self, treeview, event):

@@ -15,7 +15,18 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-from event import EventModel
+import string
+import time
+import random
+from socket import gethostname
 
-class RecurEventModel(EventModel):
-	pass
+def gen_uid():
+	"""
+	Generate a unique random UID that can be used to uniquely identify
+	iCalendar components.
+	"""
+	chars = list(string.ascii_letters + string.digits)
+	uid = time.strftime('%Y%m%dT%H%M%SZ-')
+	uid += ''.join([random.choice(chars) for i in range(16)])
+	uid += '@' + gethostname()
+	return(uid)

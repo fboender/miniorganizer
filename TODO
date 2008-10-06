@@ -2,6 +2,8 @@ Component           Todo
 ------------------+----------------------------------------------------------------------
 install             README in root dir of archive.
 miniorganizer       Modifying an event (todo too?) doesn't signal that the calendar has changed.
+miniorganizer       Can't disable recurrence once it's turned on.
+miniorganizer       Removing an recurring event by deleting a recurrence of the event crashes with the message ValueError: list.remove(x): x not in list
 miniorganizer       Manual page.
 miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
 miniorganizer       Refactor models.

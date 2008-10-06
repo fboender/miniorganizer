@@ -16,26 +16,26 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import icalendar
 import miniorganizer
-from kiwi.model import Model
+from base import BaseModel
 
-class TodoModel(Model):
+class TodoModel(BaseModel):
 
-	def __init__(self, mo, vtodo):
-		assert(type(vtodo) == icalendar.cal.Todo)
+	def __init__(self, vtodo):
+		BaseModel.__init__(self)
 
-		self.mo = mo
 		self.__vtodo = vtodo
 		self.__alarms = []
+		self.modified = False
 		for valarm in self.__vtodo.walk('VALARM'):
-			self.__alarms.append(self.mo.factory.alarmFromVComponent(valarm, self))
+			self.__alarms.append(self.factory.alarm_from_vcomponent(valarm, self))
 
 	def get_summary(self):
 		return(self.__vtodo.get('SUMMARY', ''))
 
 	def set_summary(self, summary):
 		self.__vtodo.set('SUMMARY', summary)
+		self.modified = True
 
 	def get_summaryformat(self):
 		if self.get_done():
@@ -49,12 +49,14 @@ class TodoModel(Model):
 
 	def set_priority(self, priority):
 		self.__vtodo.set('PRIORITY', priority)
+		self.modified = True
 
 	def get_description(self):
 		return(self.__vtodo.get('DESCRIPTION', '').replace('\\n', '\n'))
 
 	def set_description(self, description):
 		self.__vtodo.set('DESCRIPTION', description.replace('\n', '\\n'))
+		self.modified = True
 
 	def get_done(self):
 		if self.__vtodo.get('PERCENT-COMPLETE', 0) == 100:
@@ -67,6 +69,7 @@ class TodoModel(Model):
 			self.__vtodo.set('PERCENT-COMPLETE', 100)
 		else:
 			self.__vtodo.set('PERCENT-COMPLETE', 0)
+		self.modified = True
 
 	def get_created(self):
 		created = self.__vtodo.get('CREATED', None)
@@ -85,6 +88,7 @@ class TodoModel(Model):
 			self.__vtodo.pop('DUE')
 		else:
 			self.__vtodo.set('DUE', due_dt)
+		self.modified = True
 
 	def get_start(self):
 		return(self.get_due())
@@ -92,15 +96,15 @@ class TodoModel(Model):
 	def get_uid(self):
 		return(self.__vtodo.get('UID', None))
 
-	def get_parent(self):
-		parent = None
-		parent_uid = self.__vtodo.get('RELATED-TO', None)
-		if parent_uid:
-			parent = self.mo.getComponentByUID(parent_uid)
-		return(parent)
+	#def get_parent(self):
+	#	parent = None
+	#	parent_uid = self.__vtodo.get('RELATED-TO', None)
+	#	if parent_uid:
+	#		parent = self.calendar_model.get_component_by_uid(parent_uid)
+	#	return(parent)
 
-	def get_children(self):
-		return(self.mo.getRelatedComponents(self.get_uid()))
+	#def get_children(self):
+	#	return(self.calendar_model.get_related_components(self.get_uid()))
 
 	def get_related_to(self):
 		return(self.__vtodo.get('RELATED-TO', None))
@@ -119,10 +123,3 @@ class TodoModel(Model):
 	def get_vcomponent(self):
 		return(self.__vtodo)
 
-	def __setattr__(self, key, value):
-		f = getattr(self, 'set_%s' % (key), None)
-		if f:
-			f(value)
-		else:
-			self.__dict__[key] = value
-		Model.__setattr__(self, key, value)

@@ -18,11 +18,11 @@
 import datetime
 import gtk
 import re
-import miniorganizer.models
 import miniorganizer.ui
 from dateutil.relativedelta import relativedelta
 from kiwi.ui.delegates import GladeSlaveDelegate
 from kiwi.ui.objectlist import ObjectTree, Column, ColoredColumn
+from miniorganizer.models import Factory
 
 class EventUI(GladeSlaveDelegate):
 	
@@ -31,6 +31,7 @@ class EventUI(GladeSlaveDelegate):
 	def __init__(self, parent, mo):
 		self.parent = parent
 		self.mo = mo
+		self.factory = Factory()
 
 		self.__stop_auto_highlight = False # Disable automatic highlighting of events.
 		self.__stop_auto_dayjump = False   # Disable automatically jumping to the start of the event on selection.
@@ -76,10 +77,10 @@ class EventUI(GladeSlaveDelegate):
 		start = datetime.datetime(sel_day[0], sel_day[1]+1, sel_day[2], now.hour, now.minute)
 		end = start + datetime.timedelta(hours=+1)
 
-		event = self.mo.factory.event(start, end)
+		event = self.factory.event(start, end)
 		event = miniorganizer.ui.EventEditUI(self.mo, event).run()
 		if event:
-			self.mo.add(event)
+			self.mo.cal_model.add(event)
 			self.treeview_event.append(None, event)
 			self.on_calendar__month_changed(self.calendar)
 			self.on_calendar__day_selected(self.calendar)
@@ -88,7 +89,7 @@ class EventUI(GladeSlaveDelegate):
 	def on_toolbutton_remove__clicked(self, *args):
 		sel_event = self.treeview_event.get_selected()
 		if sel_event:
-			self.mo.delete(sel_event)
+			self.mo.cal_model.delete(sel_event)
 			self.treeview_event.remove(sel_event)
 			self.on_calendar__month_changed(self.calendar)
 			self.on_calendar__day_selected(self.calendar)
@@ -110,7 +111,7 @@ class EventUI(GladeSlaveDelegate):
 		month_start = datetime.datetime(sel_date[0], sel_date[1]+1, 1)
 		month_end = month_start + relativedelta(months=+1, seconds=-1)
 
-		events = self.mo.getEvents() + self.mo.getRecurEvents(month_start, month_end)
+		events = self.mo.cal_model.get_events() + self.mo.cal_model.get_events_recurring(month_start, month_end)
 		for event in events:
 			event_start = event.get_start()
 			event_end = event.get_end()
@@ -156,7 +157,7 @@ class EventUI(GladeSlaveDelegate):
 			# be highlighted if no event actually starts on that day.
 			elif (day_start > event_start and day_start < event_end) or \
                  (day_end > event_start and day_end < event_end) or \
-                 (event_start > day_start and event_end < day_end): 
+                 (event_start > day_start and event_end < day_end):
 				highlight_events.append(event)
 
 		# Highlight the first event on the day the user selected, unless the
@@ -178,7 +179,7 @@ class EventUI(GladeSlaveDelegate):
 		# Determine the start and end of the period that needs to be shown.
 		display_range = self.combobox_display_range.get_active_text()
 		if display_range == 'Day':
-			display_start = sel_dt_start 
+			display_start = sel_dt_start
 			display_end = display_start + datetime.timedelta(days=+1, seconds=-1)
 			text = '%s' % (display_start.strftime('%a %b %d %Y'))
 		elif display_range == 'Week':
@@ -219,7 +220,7 @@ class EventUI(GladeSlaveDelegate):
 			self.treeview_event.remove(event)
 
 		# Add the events for the displayed range to the list
-		events = self.mo.getEvents() + self.mo.getRecurEvents(self.display_start, self.display_end)
+		events = self.mo.cal_model.get_events() + self.mo.cal_model.get_events_recurring(self.display_start, self.display_end)
 		for event in events:
 			event_start = event.get_start()
 			event_end = event.get_end()
@@ -239,7 +240,7 @@ class EventUI(GladeSlaveDelegate):
 		# FIXME: This might be more complicated than it needs to be. See todo.py's row_activated.
 		sel_event = self.treeview_event.get_selected()
 		sel_event = getattr(sel_event, 'real_event', sel_event) # Edit real event instead of recurring event
-		result = miniorganizer.ui.EventEditUI(self.mo, sel_event).run()
+		event = miniorganizer.ui.EventEditUI(self.mo, sel_event).run()
 		self.on_calendar__month_changed(self.calendar)
 		self.on_calendar__day_selected(self.calendar)
 		if sel_event in self.treeview_event:

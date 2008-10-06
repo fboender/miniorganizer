@@ -16,27 +16,26 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import icalendar
-from kiwi.model import Model
-from alarm import AlarmModel
+from base import BaseModel
 from copy import copy
 
-class EventModel(Model):
+class EventModel(BaseModel):
 	
-	def __init__(self, mo, vevent):
-		assert(type(vevent) == icalendar.cal.Event)
+	def __init__(self, vevent):
+		BaseModel.__init__(self)
 
-		self.mo = mo
 		self.__vevent = vevent
 		self.__alarms = []
+		self.modified = False
 		for valarm in self.__vevent.walk('VALARM'):
-			self.__alarms.append(self.mo.factory.alarmFromVComponent(valarm, self))
+			self.__alarms.append(self.factory.alarm_from_vcomponent(valarm, self))
 
 	def get_summary(self):
 		return(self.__vevent.get('SUMMARY', ''))
 
 	def set_summary(self, summary):
 		self.__vevent.set('SUMMARY', summary)
+		self.modified = True
 
 	def get_summaryformat(self):
 		now = datetime.datetime.now()
@@ -53,6 +52,7 @@ class EventModel(Model):
 
 	def set_description(self, description):
 		self.__vevent.set('DESCRIPTION', description.replace('\n', '\\n'))
+		self.modified = True
 
 	def get_descriptionformat(self):
 		return(self.get_description())
@@ -64,6 +64,7 @@ class EventModel(Model):
 
 	def set_start(self, start):
 		self.__vevent.set('DTSTART', start)
+		self.modified = True
 
 	def get_end(self):
 		dt = self.__vevent['DTEND'].dt
@@ -72,6 +73,7 @@ class EventModel(Model):
 
 	def set_end(self, end):
 		self.__vevent.set('DTEND', end)
+		self.modified = True
 
 	def get_endformat(self):
 		end = self.__vevent.get('DTEND', None)
@@ -84,6 +86,7 @@ class EventModel(Model):
 
 	def set_duration(self, duration):
 		self.set_end(self.get_start() + duration)
+		self.modified = True
 		
 	def get_durationformat(self):
 		return(str(self.get_duration()))
@@ -93,6 +96,7 @@ class EventModel(Model):
 
 	def set_location(self, location):
 		self.__vevent.set('LOCATION', location)
+		self.modified = True
 
 	def get_alarms(self):
 		return(self.__alarms)
@@ -100,10 +104,12 @@ class EventModel(Model):
 	def add_alarm(self, alarm):
 		self.__vevent.add_component(alarm.get_valarm())
 		self.__alarms.append(alarm)
+		self.modified = True
 
 	def del_alarm(self, alarm):
 		self.__vevent.subcomponents.remove(alarm.get_valarm())
 		self.__alarms.remove(alarm)
+		self.modified = True
 
 	def get_vcomponent(self):
 		return(self.__vevent)
@@ -119,6 +125,7 @@ class EventModel(Model):
 
 	def set_recur(self, recur):
 		self.__vevent.set('RRULE', recur)
+		self.modified = True
 		
 	def __cmp__(self, x):
 		if not isinstance(x, EventModel):
@@ -135,6 +142,7 @@ class EventModel(Model):
 			return(0)
 
 	def dup(self):
+		# FIXME: Move to BaseModel?
 		vevent = copy(self.__vevent)
-		event = self.mo.factory.eventFromVComponent(vevent)
+		event = self.factory.event_from_vcomponent(vevent)
 		return(event)
