@@ -180,6 +180,9 @@ class EventUI(GladeSlaveDelegate):
 			else:
 				self.treeview_event.unselect_all()
 			
+	def on_calendar__day_selected_double_click(self, *args):
+		self.on_toolbutton_add__clicked()
+
 	def on_combobox_display_range__changed(self, *args):
 		# Get the currently selected date in the calendar.
 		sel_date = self.calendar.get_date()

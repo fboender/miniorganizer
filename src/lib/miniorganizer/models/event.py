@@ -127,6 +127,9 @@ class EventModel(BaseModel):
 		self.__vevent.set('RRULE', recur)
 		self.modified = True
 		
+	def del_recur(self):
+		self.__vevent.pop('RRULE')
+
 	def __cmp__(self, x):
 		if not isinstance(x, EventModel):
 			return(-1)

@@ -35,8 +35,8 @@ cp -ar docs $INSTALLDIR
 echo "Putting executable symlink in $BINDIR"
 rm $BINDIR/miniorganizer 2>/dev/null
 rm $BINDIR/miniorganizer-alarm 2>/dev/null
-ln -s $INSTALLDIR/miniorganizer $BINDIR/miniorganizer
-ln -s $INSTALLDIR/miniorganizer-alarm $BINDIR/miniorganizer-alarm
+ln -s $INSTALLDIR/bin/miniorganizer $BINDIR/miniorganizer
+ln -s $INSTALLDIR/bin/miniorganizer-alarm $BINDIR/miniorganizer-alarm
 
 if [ -d '$MENUDIR' ]; then
 	echo "Installing desktop menu icon"

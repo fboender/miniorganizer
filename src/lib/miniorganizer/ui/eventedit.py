@@ -91,6 +91,9 @@ class EventEditUI(GladeDelegate):
 	def on_button_recurrenceedit__clicked(self, *args):
 		x = miniorganizer.ui.RecurrenceEditUI(self.mo, self.event.get_recur())
 		recur = x.run()
+		if recur == {}:
+			self.event.del_recur()
+			self.label_recurrence.set_text('')
 		if recur:
 			self.event.set_recur(recur)
 			self.label_recurrence.set_text(recur['FREQ'][0].capitalize())

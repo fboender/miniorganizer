@@ -125,6 +125,9 @@ class RecurrenceEditUI(GladeDelegate):
 		gtk.main()
 		return(self.recur)
 		
+	def on_radio_once__toggled(self, radiobutton):
+		pass
+
 	def on_radio_daily__toggled(self, radiobutton):
 		state = radiobutton.get_active()
 		self.alignment_daily.set_sensitive(state)
@@ -143,7 +146,9 @@ class RecurrenceEditUI(GladeDelegate):
 
 	def on_button_ok__clicked(self, *args):
 		new_recur = icalendar.vRecur()
-		if self.radio_daily.get_active():
+		if self.radio_once.get_active():
+			new_recur = {}
+		elif self.radio_daily.get_active():
 			new_recur['FREQ'] = ['DAILY']
 			new_recur['INTERVAL'] = [self.spinbutton_daily_interval.get_value()]
 		elif self.radio_weekly.get_active():
