@@ -3,6 +3,7 @@ Bugs
 
 Component           Todo
 ------------------+----------------------------------------------------------------------
+miniorganizer       Ampersand in title caused bugs.
 miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
 miniorganizer       Inputting a from/to date of 05-23-08 21:00 to 05-24-08 00:00 makes the duration 1 day, hours (should be 3 hours). Does work when entering 00:01
 miniorganizer       Under a raw installation of Debian (4.0), miniorganizer reports various bugs. Fix these.
