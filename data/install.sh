@@ -38,7 +38,7 @@ rm $BINDIR/miniorganizer-alarm 2>/dev/null
 ln -s $INSTALLDIR/bin/miniorganizer $BINDIR/miniorganizer
 ln -s $INSTALLDIR/bin/miniorganizer-alarm $BINDIR/miniorganizer-alarm
 
-if [ -d '$MENUDIR' ]; then
+if [ -d "$MENUDIR" ]; then
 	echo "Installing desktop menu icon"
 	cp desktop/miniorganizer.desktop $MENUDIR
 fi

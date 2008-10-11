@@ -2,7 +2,7 @@
 Categories=Application;Office;GTK;GNOME;Calendar;
 Comment=Small, no-nonsense Personal Organizer
 Exec=miniorganizer
-Icon=/usr/local/lib/miniorganizer/glade/miniorganizer-64.png
+Icon=/usr/local/lib/miniorganizer/bin/glade/miniorganizer-64.png
 Name=MiniOrganizer
 GenericName=Organizer
 NoDisplay=false
