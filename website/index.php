@@ -25,6 +25,7 @@ if (!array_key_exists($page, $menu)) {
 <html>
 	<head>
 		<link href="css/index.css" rel="stylesheet" type="text/css">
+		<title>MiniOrganizer - A no-nonsense personal digital assistant for Linux</title>
 	</head>
 	<body>
 		<div id='header'>

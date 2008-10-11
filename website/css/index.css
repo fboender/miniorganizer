@@ -58,11 +58,24 @@ div#contents {
 div#contents h1 {
 	color: #C61100;
 }
+div#contents h3 {
+	margin-left: 10px;
+}
 div#contents a {
 	color: #FFFFFF;
 }
 div#contents p {
 	margin-left: 10px;
+}
+div#contents li p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+div#contents pre {
+	margin-left: 20px;
+	background-color: #202020;
+	border: 1px solid #606060;
+	padding: 10px;
 }
 div#sidebar {
 	display: block;

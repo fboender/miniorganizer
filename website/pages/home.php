@@ -10,7 +10,7 @@
 <div id='sidebar'>
 	<h2>Download</h2>
 	<div id='download'>
-		<a href='?page=download'>Coming Soon</a>
+		<a href='/releases/miniorganizer-0.1.tar.gz'>Release 0.1</a>
 	</div>
 
 	<h2>Screenshots</h2>
@@ -30,10 +30,6 @@
 <p><a href='?page=about'>More information &rarr;</a></p>
 
 <h2>News</h2>
-<p>No news yet</p>
-<!--
-<h3>Fri May 16 2008</h3>
-<p>Released version 0.1. This is kind of a pre-release, and so it might still be a little rough around the edges, since there hasn't been any user feedback so far. Please report any installation and configuration problems, as well as User Interface issues, feature requests or anything else that's on your mind!</p>
-<p><a href='?page=news'>More news &rarr;</a></p>
--->
+<h3>Mon Jun 23 16:37:19 CEST 2008</h3>
+<p>Version 0.1 of MiniOrganizer is out! This is the first released version, so there will probably be some installation and other bugs in it. Please try it out and let me know what you think. You can mail me at <tt>ferry DOT boender (@) gmail . com</tt>.</p>
 <p><a href='?page=news'>More news &rarr;</a></p>
