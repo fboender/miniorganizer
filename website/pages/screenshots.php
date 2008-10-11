@@ -2,6 +2,21 @@
 
 <p>This is what MiniOrganizer currently looks like.</p>
 
+<h2>v0.2</h2>
+
+<table class='screenshots'>
+	<tr valign='top'>
+		<td>
+			<b>Add Calendar event</b><br />
+			<img src='screenshots/0.2/event_edit.png' /><br />
+		</td>
+		<td>
+			<b>Recurrence edit</b><br />
+			<img src='screenshots/0.2/event_edit_recur.png' /><br />
+		</td>
+	</tr>
+</table>
+
 <h2>v0.1</h2>
 
 <table class='screenshots'>
