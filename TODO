@@ -1,29 +1,8 @@
-Bugs
-====
-
-Component           Todo
-------------------+----------------------------------------------------------------------
-miniorganizer       Ampersand in title caused bugs.
-miniorganizer       Prevent miniorganizer from running multiple times, cause it'll fuck up calendars
-miniorganizer       Inputting a from/to date of 05-23-08 21:00 to 05-24-08 00:00 makes the duration 1 day, hours (should be 3 hours). Does work when entering 00:01
-miniorganizer       Under a raw installation of Debian (4.0), miniorganizer reports various bugs. Fix these.
-miniorganizer       An event which is a whole day event, and which runs from 06/13/08 to 06/16/08 doesn't appear in the calendar on the 16th (because it ends on 06/16/08 at 00:00).
-miniorganizer       Triggers on date/time is incorrect for alarms.
-
 Features
 ========
 
 Component           Todo
 ------------------+----------------------------------------------------------------------
-install             README in root dir of archive.
-miniorganizer       Manual page.
-event               Right click on day == popup menu.
-miniorganizer       Right click on event/todo == popup menu.
-event               Recurring events.
-todo                Composite todo's.
-todo                Show percentage complete (or progressbar) for composite and normal todos.
-miniorganizer       RadioButton errors.
-miniorganizer       Implement notes
 notifier            Automatic forking in background.
 notifier            Add hour snooze.
 alarms              Allow the user to specify an actual date/time on which the alarm should trigger and automatically convert it to a time offset.
