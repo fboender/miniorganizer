@@ -7,7 +7,8 @@ $menu = array(
 	"about" => "About",
 	"news" => "News",
 	"download" => "Download",
-	"screenshots" => "Screenshots"
+	"screenshots" => "Screenshots",
+	"development" => "Development",
 );
 
 // Client side vars
