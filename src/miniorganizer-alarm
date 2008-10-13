@@ -60,6 +60,7 @@ class AlarmNotifier(object):
 		# Load the organizer and determine the last time we've seen so we can alert
 		# for missed alarms.
 		self.mo = mo
+		self.proc_mo = None # Subprocess handle
 		self.log = logging.getLogger('MINICAL-ALARM')
 		self.lastseen = datetime.datetime.fromtimestamp(self.mo.config['reminder.lastseen'])
 		self.snoozes = []
@@ -123,7 +124,10 @@ class AlarmNotifier(object):
 
 	def activate(self, *args):
 		log.debug('Tray icon activated. Spawning Miniorganizer')
-		subprocess.Popen('-d50', executable=os.path.join(basepath, 'miniorganizer'))
+		if self.proc_mo and self.proc_mo.poll() == None:
+			log.debug('Miniorgnizer still running. Not spawning')
+			return
+		self.proc_mo = subprocess.Popen('-d50', executable=os.path.join(basepath, 'miniorganizer'))
 				
 if __name__ == '__main__':
 	# Parse commandline options.
