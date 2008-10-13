@@ -72,7 +72,7 @@ class TodoUI(GladeSlaveDelegate):
 
 	def on_toolbutton_remove__clicked(self, *args):
 		todo = self.treeview_todo.get_selected()
-		children = self.mo.cal_model.get_models_related_by_uid(todo.get_related_to())
+		children = self.mo.cal_model.get_models_related_by_uid(todo.get_uid())
 
 		if children:
 			response = dialogs.warning('This Todo contains sub-todos. Removing it will also remove the sub-todos. Is this what you want?', buttons=gtk.BUTTONS_YES_NO)
@@ -86,7 +86,7 @@ class TodoUI(GladeSlaveDelegate):
 	def on_toolbutton_addsub__clicked(self, *args):
 		parent_todo = self.treeview_todo.get_selected()
 		todo = self.factory.todo(parent_todo)
-		if miniorganizer.ui.TodoEditUI(self.mo, todo):
+		if miniorganizer.ui.TodoEditUI(self.mo, todo).run():
 			self.mo.cal_model.add(todo)
 			self.treeview_todo.append(parent_todo, todo)
 			self.treeview_todo.expand(parent_todo)
