@@ -30,6 +30,13 @@
 <p><a href='?page=about'>More information &rarr;</a></p>
 
 <h2>News</h2>
+<h2>Tue Oct 14 20:32:08 CEST 2008</h2>
+<p>Version <a href="/download">0.2.1</a> released! This is a bugfix release for v0.2 with the following fixes:</p>
+<ul>
+	<li>Bug fixed: Adding/modifying a todo now shows the Todo Editor again.</li>
+	<li>Bug fixed: Removing a todo with no sub-todos no longer complains about sub-todos which will be deleted.</li>
+</ul>
+
 <h3>Sat Oct 11 18:39:41 CEST 2008</h3>
 <p>Version <a href="/download">0.2</a> has been released. Changes in this release include:</p>
 <ul>
