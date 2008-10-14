@@ -10,7 +10,7 @@
 <div id='sidebar'>
 	<h2>Download</h2>
 	<div id='download'>
-		<a href='/releases/miniorganizer-0.2.tar.gz'>Release 0.2</a>
+		<a href='/releases/miniorganizer-0.2.1.tar.gz'>Release 0.2.1</a>
 	</div>
 
 	<h2>Screenshots</h2>
@@ -30,7 +30,7 @@
 <p><a href='?page=about'>More information &rarr;</a></p>
 
 <h2>News</h2>
-<h2>Tue Oct 14 20:32:08 CEST 2008</h2>
+<h3>Tue Oct 14 20:32:08 CEST 2008</h3>
 <p>Version <a href="/download">0.2.1</a> released! This is a bugfix release for v0.2 with the following fixes:</p>
 <ul>
 	<li>Bug fixed: Adding/modifying a todo now shows the Todo Editor again.</li>
