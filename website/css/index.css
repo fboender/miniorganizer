@@ -4,7 +4,7 @@ html, body {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: small;
 	font-weight: normal;
-	color: #FFFFFF;
+	color: #E0E0E0;
 }
 div#header {
 	background-color: #2f2f2f;
@@ -52,7 +52,7 @@ div#menu_r {
 	float: right;
 }
 div#contents {
-	color: #FFFFFF;
+	color: #E0E0E0;
 	margin: 40px;
 }
 div#contents h1 {
