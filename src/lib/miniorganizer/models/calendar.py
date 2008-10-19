@@ -19,6 +19,8 @@ from base import BaseModel
 from alarm import AlarmModel
 from event import EventModel
 from todo import TodoModel
+from journal import JournalModel
+
 from dateutil import rrule
 
 class CalendarModel(BaseModel):
@@ -141,6 +143,12 @@ class CalendarModel(BaseModel):
 			if hasattr(model, 'get_alarms'):
 				alarms.extend(model.get_alarms())
 		return(alarms)
+
+	def get_journals(self):
+		"""
+		Return a list of JournalModel models in the calendar.
+		"""
+		return(self.get_models(JournalModel))
 
 	def get_vcalendar(self):
 		return(self.__vcalendar)

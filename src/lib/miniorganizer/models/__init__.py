@@ -20,7 +20,8 @@ from calendar import CalendarModel
 from alarm import AlarmModel
 from event import EventModel
 from todo import TodoModel
+from journal import JournalModel
 
 # Because we don't want to polute the namespace with stuff, delete some things
 # here.
-del factory, calendar, alarm, event, todo
+del factory, calendar, alarm, event, todo, journal

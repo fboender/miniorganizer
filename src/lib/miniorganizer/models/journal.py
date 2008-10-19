@@ -15,24 +15,32 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
-from kiwi.ui.delegates import GladeSlaveDelegate
-from kiwi.ui.objectlist import ObjectList, Column, ColoredColumn
+#import datetime
+from base import BaseModel
+#from copy import copy
 
-class NotesUI(GladeSlaveDelegate):
+class JournalModel(BaseModel):
+	
+	def __init__(self, vjournal):
+		BaseModel.__init__(self)
 
-	def __init__(self, parent, mo):
-		self.parent = parent
-		self.mo = mo 
+		self.__vjournal = vjournal
+		self.modified = False
 
-		# Set up the user interface
-		GladeSlaveDelegate.__init__(self, gladefile="mo_tab_notes", toplevel_name="window_main")
+	def get_summary(self):
+		return(self.__vjournal.get('SUMMARY', ''))
 
-		noteColumns = [
-			Column("name", title='Name', data_type=str),
-		]
-		self.treeview_notes = ObjectList(noteColumns)
-		self.vbox_notelist.add(self.treeview_notes)
+	def set_summary(self, summary):
+		self.__vjournal.set('SUMMARY', summary)
+		self.modified = True
 
-	def on_toolbutton_add__clicked(self, *args):
-		raise NotImplementedError("Not implemented")
+	def get_description(self):
+		return(self.__vjournal.get('DESCRIPTION', '').replace('\\n', '\n'))
+		
+	def set_description(self, description):
+		self.__vjournal.set('DESCRIPTION', description.replace('\n', '\\n'))
+		self.modified = True
+
+	def get_vcomponent(self):
+		return(self.__vjournal)
+

@@ -36,7 +36,7 @@ class MiniOrganizerUI(GladeDelegate):
 		self.tab_events = miniorganizer.ui.EventUI(self, self.mo)
 		self.attach_slave("eventbox_events", self.tab_events)
 
-		self.tab_notes = miniorganizer.ui.NotesUI(self, self.mo)
+		self.tab_notes = miniorganizer.ui.NoteUI(self, self.mo)
 		self.attach_slave("eventbox_notes", self.tab_notes)
 
 		self.show_all()

@@ -25,6 +25,7 @@ from calendar import CalendarModel
 from event import EventModel
 from alarm import AlarmModel
 from todo import TodoModel
+from journal import JournalModel
 from miniorganizer.tools import gen_uid
 
 class Factory():
@@ -84,6 +85,9 @@ class Factory():
 		return(todo_model)
 
 	def todo_from_vcomponent(self, vtodo):
+		"""
+		Create a TodoModel from a vTodo iCalendar component.
+		"""
 		# FIXME: no parent_model?
 		todo_model = TodoModel(vtodo)
 		return(todo_model)
@@ -111,6 +115,22 @@ class Factory():
 		alarm_model = AlarmModel(valarm, parent_model)
 		return(alarm_model)
 
+	def journal(self):
+		"""
+		Create a new JournalModel. 
+		"""
+		vjournal = icalendar.Journal()
+		vjournal.set('UID', gen_uid())
+		journal_model = JournalModel(vjournal)
+		return(journal_model)
+		
+	def journal_from_vcomponent(self, vjournal):
+		"""
+		Create an JournalModel from a vJournal iCalendar component. 
+		"""
+		journal_model = JournalModel(vjournal)
+		return(journal_model)
+
 	def model_from_vcomponent(self, vcomponent):
 		"""
 		Create a Model from a vComponent. Automatically guesses the type of the
@@ -123,5 +143,7 @@ class Factory():
 			return(self.todo_from_vcomponent(vcomponent))
 		elif isinstance(vcomponent, icalendar.cal.Alarm):
 			return(self.alarm_from_vcomponent(vcomponent))
+		elif isinstance(vcomponent, icalendar.cal.Journal):
+			return(self.journal_from_vcomponent(vcomponent))
 		else:
 			raise NotImplementedError('Component type \'%s\' is not supported yet.' % (type(vcomponent)))

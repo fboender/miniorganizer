@@ -25,7 +25,7 @@ from reminder import ReminderUI
 # Tabs
 from event import EventUI
 from todo import TodoUI
-from notes import NotesUI
+from note import NoteUI
 
 # Edit dialogs
 from eventedit import EventEditUI
@@ -34,11 +34,12 @@ from alarmedit import AlarmEditUI
 from alarmsedit import AlarmsEditUI
 from recurrenceedit import RecurrenceEditUI
 from datetimeedit import DateTimeEditUI
+from noteedit import NoteEditUI
 
 # Misc dialogs
 from error import ErrorUI
 
 # Because we don't want to polute the namespace with stuff, delete some things
 # here.
-del main, about, reminder, event, todo, notes, eventedit, todoedit
+del main, about, reminder, event, todo, note, eventedit, todoedit, noteedit
 del alarmedit, alarmsedit, recurrenceedit, datetimeedit, error
