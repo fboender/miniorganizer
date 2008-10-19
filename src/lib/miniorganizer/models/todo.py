@@ -52,10 +52,10 @@ class TodoModel(BaseModel):
 		self.modified = True
 
 	def get_description(self):
-		return(self.__vtodo.get('DESCRIPTION', '').replace('\\n', '\n'))
+		return(self.__vtodo.get('DESCRIPTION', ''))
 
 	def set_description(self, description):
-		self.__vtodo.set('DESCRIPTION', description.replace('\n', '\\n'))
+		self.__vtodo.set('DESCRIPTION', description)
 		self.modified = True
 
 	def get_done(self):

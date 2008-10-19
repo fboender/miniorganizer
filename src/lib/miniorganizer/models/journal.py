@@ -35,10 +35,10 @@ class JournalModel(BaseModel):
 		self.modified = True
 
 	def get_description(self):
-		return(self.__vjournal.get('DESCRIPTION', '').replace('\\n', '\n'))
+		return(self.__vjournal.get('DESCRIPTION', ''))
 		
 	def set_description(self, description):
-		self.__vjournal.set('DESCRIPTION', description.replace('\n', '\\n'))
+		self.__vjournal.set('DESCRIPTION', description)
 		self.modified = True
 
 	def get_uid(self):

@@ -48,10 +48,10 @@ class EventModel(BaseModel):
 		return(fmt % (self.get_summary()))
 		
 	def get_description(self):
-		return(self.__vevent.get('DESCRIPTION', '').replace('\\n', '\n'))
+		return(self.__vevent.get('DESCRIPTION', ''))
 
 	def set_description(self, description):
-		self.__vevent.set('DESCRIPTION', description.replace('\n', '\\n'))
+		self.__vevent.set('DESCRIPTION', description)
 		self.modified = True
 
 	def get_descriptionformat(self):
