@@ -19,7 +19,8 @@ import datetime
 import gtk
 import miniorganizer.ui
 from kiwi.ui.delegates import GladeSlaveDelegate
-from kiwi.ui.objectlist import ObjectList, Column, ColoredColumn
+from kiwi.ui.objectlist import ObjectTree, Column, ColoredColumn
+from kiwi.ui import dialogs
 from miniorganizer.models import Factory
 
 class NoteUI(GladeSlaveDelegate):
@@ -35,14 +36,17 @@ class NoteUI(GladeSlaveDelegate):
 		noteColumns = [
 			Column("summary", title='Title', data_type=str),
 		]
-		self.treeview_note = ObjectList(noteColumns)
+		#self.treeview_note = ObjectList(noteColumns)
+		self.treeview_note = ObjectTree(noteColumns)
 		self.vbox_notelist.add(self.treeview_note)
 
 		for journal in self.mo.cal_model.get_journals():
-			self.treeview_note.append(journal)
+			parent = self.mo.cal_model.get_model_by_uid(journal.get_related_to())
+			self.treeview_note.append(parent, journal)
 
 		# Connect signals
 		self.treeview_note.connect('row-activated', self.treeview_note__row_activated)
+		self.treeview_note.connect('selection-changed', self.treeview_note__selection_changed)
 		self.treeview_note.connect('key-press-event', self.treeview_note__key_press_event)
 
 	def on_toolbutton_add__clicked(self, *args):
@@ -50,16 +54,42 @@ class NoteUI(GladeSlaveDelegate):
 		journal = miniorganizer.ui.NoteEditUI(self.mo, journal).run()
 		if journal:
 			self.mo.cal_model.add(journal)
-			self.treeview_note.append(journal)
+			self.treeview_note.append(None, journal)
 			self.parent.menuitem_save.set_sensitive(True)
+
+	def on_toolbutton_addsub__clicked(self, *args):
+		parent_journal = self.treeview_note.get_selected()
+		journal = self.factory.journal(parent_journal)
+		if miniorganizer.ui.NoteEditUI(self.mo, journal).run():
+			self.mo.cal_model.add(journal)
+			self.treeview_note.append(parent_journal, journal)
+			self.treeview_note.expand(parent_journal)
+			self.parent.menuitem_save.set_sensitive(True)
+		
+	def on_toolbutton_edit__clicked(self, *args):
+		sel_note = self.treeview_note.get_selected()
+		self.treeview_note__row_activated(self.treeview_note, sel_note)
 
 	def on_toolbutton_remove__clicked(self, *args):
 		sel_note = self.treeview_note.get_selected()
-
 		if sel_note:
-			self.mo.cal_model.delete(sel_note)
-			self.treeview_note.remove(sel_note)
+			children = self.mo.cal_model.get_models_related_by_uid(sel_note.get_uid())
 
+			if children:
+				response = dialogs.warning('This note contains sub-notes. Removing it will also remove the sub-notes. Is this what you want?', buttons=gtk.BUTTONS_YES_NO)
+				if response != gtk.RESPONSE_YES:
+					return
+
+			self.mo.cal_model.delete(sel_note, True)
+			self.treeview_note.remove(sel_note, True)
+			self.parent.menuitem_save.set_sensitive(True)
+
+	def treeview_note__selection_changed(self, list, selection):
+		has_selection = selection is not None
+		self.toolbutton_addsub.set_sensitive(has_selection)
+		self.toolbutton_remove.set_sensitive(has_selection)
+		self.toolbutton_edit.set_sensitive(has_selection)
+	
 	def treeview_note__row_activated(self, list, object):
 		sel_note = self.treeview_note.get_selected()
 		note = miniorganizer.ui.NoteEditUI(self.mo, sel_note).run()

@@ -115,12 +115,15 @@ class Factory():
 		alarm_model = AlarmModel(valarm, parent_model)
 		return(alarm_model)
 
-	def journal(self):
+	def journal(self, parent_model=None):
 		"""
-		Create a new JournalModel. 
+		Create a new JournalModel. `parent_model` is the parent JournalModel to which
+		this todo belongs.
 		"""
 		vjournal = icalendar.Journal()
 		vjournal.set('UID', gen_uid())
+		if parent_model:
+			vjournal.set('RELATED-TO', parent_model.get_uid())
 		journal_model = JournalModel(vjournal)
 		return(journal_model)
 		

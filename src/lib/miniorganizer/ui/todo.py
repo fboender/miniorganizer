@@ -67,21 +67,22 @@ class TodoUI(GladeSlaveDelegate):
 			self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_edit__clicked(self, *args):
-		todo = self.treeview_todo.get_selected()
-		self.treeview_todo__row_activated(self.treeview_todo, todo)
+		sel_todo = self.treeview_todo.get_selected()
+		self.treeview_todo__row_activated(self.treeview_todo, sel_todo)
 
 	def on_toolbutton_remove__clicked(self, *args):
-		todo = self.treeview_todo.get_selected()
-		children = self.mo.cal_model.get_models_related_by_uid(todo.get_uid())
+		sel_todo = self.treeview_todo.get_selected()
+		if sel_todo:
+			children = self.mo.cal_model.get_models_related_by_uid(sel_todo.get_uid())
 
-		if children:
-			response = dialogs.warning('This Todo contains sub-todos. Removing it will also remove the sub-todos. Is this what you want?', buttons=gtk.BUTTONS_YES_NO)
-			if response != gtk.RESPONSE_YES:
-				return
+			if children:
+				response = dialogs.warning('This Todo contains sub-todos. Removing it will also remove the sub-todos. Is this what you want?', buttons=gtk.BUTTONS_YES_NO)
+				if response != gtk.RESPONSE_YES:
+					return
 
-		self.treeview_todo.remove(todo, True)
-		self.mo.cal_model.delete(todo, True)
-		self.parent.menuitem_save.set_sensitive(True)
+			self.treeview_todo.remove(sel_todo, True)
+			self.mo.cal_model.delete(sel_todo, True)
+			self.parent.menuitem_save.set_sensitive(True)
 
 	def on_toolbutton_addsub__clicked(self, *args):
 		parent_todo = self.treeview_todo.get_selected()

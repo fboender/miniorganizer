@@ -41,6 +41,12 @@ class JournalModel(BaseModel):
 		self.__vjournal.set('DESCRIPTION', description.replace('\n', '\\n'))
 		self.modified = True
 
+	def get_uid(self):
+		return(self.__vjournal.get('UID', None))
+
+	def get_related_to(self):
+		return(self.__vjournal.get('RELATED-TO', None))
+			
 	def get_vcomponent(self):
 		return(self.__vjournal)
 

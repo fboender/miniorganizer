@@ -96,16 +96,6 @@ class TodoModel(BaseModel):
 	def get_uid(self):
 		return(self.__vtodo.get('UID', None))
 
-	#def get_parent(self):
-	#	parent = None
-	#	parent_uid = self.__vtodo.get('RELATED-TO', None)
-	#	if parent_uid:
-	#		parent = self.calendar_model.get_component_by_uid(parent_uid)
-	#	return(parent)
-
-	#def get_children(self):
-	#	return(self.calendar_model.get_related_components(self.get_uid()))
-
 	def get_related_to(self):
 		return(self.__vtodo.get('RELATED-TO', None))
 			
