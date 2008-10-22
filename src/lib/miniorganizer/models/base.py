@@ -24,7 +24,7 @@ class BaseModel(Model):
 	"""
 	
 	def __init__(self):
-		# Deferred importing of circularly imported modules
+		# Deferred importing of modules to avoid circularly importing modules.
 		self.models = __import__('miniorganizer.models', fromlist=['models'])
 		self.factory = self.models.Factory()
 

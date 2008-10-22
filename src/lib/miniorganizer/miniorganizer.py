@@ -29,7 +29,7 @@ from kiwi.ui import dialogs
 
 class MiniOrganizer:
 	"""
-	This is the main MiniOrganizer interface. All information retrieval and
+	This is the main MiniOrganizer controller. All information retrieval and
 	manipulation on calendars and other aspects of MiniOrganizer should be done
 	through this class.
 	"""

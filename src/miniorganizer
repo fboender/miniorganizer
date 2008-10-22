@@ -40,6 +40,10 @@ kiwi.environ.environ._resources = {
 }
 
 class ErrorReporter(object):
+	"""
+	Report errors via a GTK popup so the user is aware of them and can
+	potentially file a bug report.
+	"""
 	def __init__(self, mo, stderr_buf, stderr):
 		self.mo = mo
 		self.stderr_buf = stderr_buf
@@ -94,8 +98,8 @@ if __name__ == "__main__":
 		mo.import_(options.import_)
 
 	if options.debug == 50:
-		# Start intercepting stderr so we can display GTK intercepted
-		# exceptions to the user.
+		# If run without debugging, start intercepting stderr so we can display
+		# GTK intercepted exceptions to the user.
 		stderr = sys.stderr
 		try:
 			stderr_buf = StringIO.StringIO('')
