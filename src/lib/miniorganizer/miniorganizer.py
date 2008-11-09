@@ -82,6 +82,7 @@ class MiniOrganizer:
 		self.log.debug('Creating new iCal file.')
 		self.cal_model = self.factory.calendar()
 		self.cal_modified = False
+		self.cal_fname = None
 		
 	def load(self, cal_fname):
 		self.log.debug('Loading iCal file \'%s\'.' % (cal_fname))
@@ -97,6 +98,7 @@ class MiniOrganizer:
 			self.cal_mtime = cal_mtime
 			self.cal_model = cal_model
 			self.cal_modified = False
+			self.cal_fname = cal_fname
 		except ValueError, e:
 			dialogs.error('Error in calendar file', str(e))
 			
@@ -110,7 +112,6 @@ class MiniOrganizer:
 		if filename:
 			# Save As..
 			f = file(filename, 'w')
-			#f.write(self.calendar.as_string())
 			f.write(self.cal_model.get_vcalendar().as_string())
 			f.close()
 
@@ -118,7 +119,6 @@ class MiniOrganizer:
 		elif self.cal_fname:
 			# Save..
 			f = file(self.cal_fname, 'w')
-			#f.write(self.calendar.as_string())
 			f.write(self.cal_model.get_vcalendar().as_string())
 			f.close()
 		else:
