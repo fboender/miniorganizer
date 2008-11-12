@@ -56,10 +56,12 @@ class SigHandler(object):
 		sys.exit(0)
 
 class AlarmNotifier(object):
+
 	def __init__(self, mo):
 		# Load the organizer and determine the last time we've seen so we can alert
 		# for missed alarms.
 		self.mo = mo
+		self.recur_timeframe = None # The timeframe for which recurring alarms have been read, so we can read in the next alarms if the timeframe has passed
 		self.proc_mo = None # Subprocess handle
 		self.log = logging.getLogger('MINICAL-ALARM')
 		self.lastseen = datetime.datetime.fromtimestamp(self.mo.config['reminder.lastseen'])
@@ -69,13 +71,31 @@ class AlarmNotifier(object):
 		self.log.debug('Last seen time is \'%s\'' % (self.lastseen))
 
 	def loadAlarms(self):
-		# Load the alarms and filter out any that we've already alerted for. Then
-		# sort the alarms so we can alert for the one at the top.
+		# Load the alarms and filter out any that we've already alerted for.
+		# Then sort the alarms so we can alert for the one at the top.
+
+		dtstart = datetime.datetime.now()
+		dtend = datetime.datetime.now() + datetime.timedelta(weeks=+1)
+		self.recur_timeframe = dtend
+
+		# Load standard alarms (everything in the calendar)
+		self.log.debug("Loading all normal alarms in calendar.")
 		alarms = []
 		for alarm in mo.cal_model.get_alarms():
 			trigger_dt = alarm.get_parent_model().get_start() + alarm.get_delta()
 			if trigger_dt >= self.lastseen:
 				alarms.append((trigger_dt, alarm))
+
+		# Load alarms for recuuring events.
+		self.log.debug("Loading alarms for recurring events from %s to %s." % (dtstart, dtend))
+		for event in mo.cal_model.get_events_recurring(dtstart, dtend):
+			for alarm in event.get_alarms():
+				trigger_dt = alarm.get_parent_model().get_start() + alarm.get_delta()
+				if trigger_dt >= self.lastseen:
+					alarms.append((trigger_dt, alarm))
+
+		# Load snoozed alarms (FIXME: Currently not written to disk?)
+		self.log.debug("Loading snoozed alarms.")
 		for snooze in self.snoozes:
 			alarms.append(snooze)
 		alarms.sort()
@@ -86,14 +106,25 @@ class AlarmNotifier(object):
 		return(alarms)
 		
 	def poll(self):
-		# Check if the calendar has changed
-		if mo.modified_ondisk():
+		"""
+		poll is called every so often (based on a timer) by GTK and checks to
+		see if there are any alarms for which we need to alert. First it checks
+		to see if the current alarms are still up to date (if the calendar has
+		changed and if the recurring event timeframe has passed. If so, it
+		reloads the alarms.
+		"""
+		now = datetime.datetime.now()
+
+		# Check if the calendar has changed or if the timeframe for recurring
+		# event alarms has passed. If so, reread the alarms.
+		if mo.modified_ondisk() or now >= self.recur_timeframe:
 			self.log.debug('Reloading calendar')
 			mo.reload()
 			self.alarms = self.loadAlarms()
 
 		now = datetime.datetime.now()
 		self.mo.config['reminder.lastseen'] = int(time.mktime(now.timetuple()))
+		dtend = datetime.datetime.now() + datetime.timedelta(weeks=+1)
 
 		# While there are alarms to be displayed
 		while True:
@@ -162,5 +193,6 @@ if __name__ == '__main__':
 	trayicon.set_visible(True)
 	trayicon.connect('activate', alarmNotifier.activate)
 
+	# Poll for alerts we need to show every 600 miliseconds.
 	gobject.timeout_add(600, alarmNotifier.poll)
 	gtk.main()

@@ -18,6 +18,7 @@
 import datetime
 import gtk
 import re
+import logging
 import miniorganizer.ui
 from dateutil.relativedelta import relativedelta
 from kiwi.ui.delegates import GladeSlaveDelegate
@@ -30,6 +31,7 @@ class EventUI(GladeSlaveDelegate):
 	show_ranges = ['day', 'week', 'month', 'year']
 
 	def __init__(self, parent, mo):
+		self.log = logging.getLogger('MINICAL')
 		self.parent = parent
 		self.mo = mo
 		self.factory = Factory()
@@ -126,6 +128,7 @@ class EventUI(GladeSlaveDelegate):
 			event_start = event.get_start()
 			event_end = event.get_end()
 
+			self.log.debug('Event %s, start: %s, end %s' % (event.get_summary(), event_start, event_end))
 			# If the event falls in the month, mark the days the event spans in
 			# the calendar.
 			if (month_start >= event_start and month_start <= event_end) or \
