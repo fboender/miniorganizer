@@ -1,8 +1,0 @@
-Features
-========
-
-Component           Todo
-------------------+----------------------------------------------------------------------
-notifier            Automatic forking in background.
-notifier            Add hour snooze.
-alarms              Allow the user to specify an actual date/time on which the alarm should trigger and automatically convert it to a time offset.
