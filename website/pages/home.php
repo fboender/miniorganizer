@@ -30,6 +30,16 @@
 <p><a href='?page=about'>More information &rarr;</a></p>
 
 <h2>News</h2>
+<h3>Wed Nov 12 22:06:33 CEST 2008</h3>
+<p>Version <a href="/download">0.3</a>! Features and bugfixes include:</p>
+<ul>
+	<li>Feature added: Rudimentary notes.</li>
+	<li>Bug fixed: Multi-line pieces of text with newlines are now properly read and written from calendar files.</li>
+	<li>Bug fixed: After loading a different calendar, changes to that calendar are now saved to the correct calendar.</li>
+	<li>Bug fixed: Alarms for recurring events are now alerted for.</li>
+	<li>Bug fixed: Loading a different calendar now works correctly.</li>
+</ul>
+
 <h3>Tue Oct 14 20:32:08 CEST 2008</h3>
 <p>Version <a href="/download">0.2.1</a> released! This is a bugfix release for v0.2 with the following fixes:</p>
 <ul>

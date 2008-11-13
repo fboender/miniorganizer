@@ -16,7 +16,7 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 __author__ = 'Ferry Boender'
-__version__ = '0.2.1'
+__version__ = '0.3'
 
 import sys
 import os
@@ -96,6 +96,8 @@ if __name__ == "__main__":
 
 	if options.import_:
 		mo.import_(options.import_)
+
+	print 'miniorganizer debugging ' , options.debug
 
 	if options.debug == 50:
 		# If run without debugging, start intercepting stderr so we can display

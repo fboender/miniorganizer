@@ -158,7 +158,7 @@ class AlarmNotifier(object):
 		if self.proc_mo and self.proc_mo.poll() == None:
 			log.debug('Miniorgnizer still running. Not spawning')
 			return
-		self.proc_mo = subprocess.Popen('-d50', executable=os.path.join(basepath, 'miniorganizer'))
+		self.proc_mo = subprocess.Popen((os.path.join(basepath, 'miniorganizer'),'-d%s' % (50 - options.debug)))
 				
 if __name__ == '__main__':
 	# Parse commandline options.
