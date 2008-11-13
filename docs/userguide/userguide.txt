@@ -28,6 +28,7 @@ MiniOrganizer currently features:
 * One-time and recurring appointments.
 * Hierarchical Todos.
 * Multiple alarms per appointment and todo.
+* Basic notes.
 * Alarm notification with snooze.
 * (Gnome) Panel docking.
 * Uses universal iCalendar files as storage format.
@@ -139,6 +140,19 @@ MiniOrganizer Alarm daemon
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The MiniOrganizer Alarm daemon (The +miniorganizer-daemon+ executable) is the MiniOrganizer alarm notifier. When run, it docks in your desktop's notification area and shows alerts when an appointment or todo's alarm goes off. Clicking the icon in the notification area of your desktop will launch the main MiniOrganizer interface.
+
+The MiniOrganizer Alarm daemon currently only alerts for a single Icalendar file, namely the +.miniorganizer/miniorganizer.ics+ in your home directory.
+
+Commandline options:
+
+----
+Usage: ../../../src/miniorganizer-alarm [option]
+
+Options:
+  -h, --help            show this help message and exit
+  -d DEBUG, --debug=DEBUG
+                        Debug level (1-50).
+----
 
 Legal
 -----
