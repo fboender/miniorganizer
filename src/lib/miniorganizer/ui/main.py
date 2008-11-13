@@ -64,6 +64,8 @@ class MiniOrganizerUI(GladeDelegate):
 			self.mo.load(filename)
 
 		self.tab_events.refresh()
+		self.tab_todos.refresh()
+		self.tab_notes.refresh()
 		self.menuitem_save.set_sensitive(False)
 
 	def on_menuitem_save__activate(self, *args):

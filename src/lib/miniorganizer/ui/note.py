@@ -40,14 +40,19 @@ class NoteUI(GladeSlaveDelegate):
 		self.treeview_note = ObjectTree(noteColumns)
 		self.vbox_notelist.add(self.treeview_note)
 
-		for journal in self.mo.cal_model.get_journals():
-			parent = self.mo.cal_model.get_model_by_uid(journal.get_related_to())
-			self.treeview_note.append(parent, journal)
-
 		# Connect signals
 		self.treeview_note.connect('row-activated', self.treeview_note__row_activated)
 		self.treeview_note.connect('selection-changed', self.treeview_note__selection_changed)
 		self.treeview_note.connect('key-press-event', self.treeview_note__key_press_event)
+
+		self.refresh()
+
+	def refresh(self):
+		self.treeview_note.clear()
+
+		for journal in self.mo.cal_model.get_journals():
+			parent = self.mo.cal_model.get_model_by_uid(journal.get_related_to())
+			self.treeview_note.append(parent, journal)
 
 	def on_toolbutton_add__clicked(self, *args):
 		journal = self.factory.journal()

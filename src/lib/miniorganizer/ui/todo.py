@@ -48,6 +48,15 @@ class TodoUI(GladeSlaveDelegate):
 		self.treeview_todo.connect('selection-changed', self.treeview_todo__selection_changed)
 		self.treeview_todo.connect('key-press-event', self.treeview_todo__key_press_event)
 
+		self.refresh()
+
+	def refresh(self):
+		"""
+		Refresh the entire todo tab. This clears everything and rebuilds it.
+		Call this when todos are removed outside of this class.
+		"""
+		self.treeview_todo.clear()
+
 		# Fill the user interface with information
 		for todo in self.mo.cal_model.get_todos():
 			parent = self.mo.cal_model.get_model_by_uid(todo.get_related_to())
