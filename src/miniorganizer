@@ -97,8 +97,6 @@ if __name__ == "__main__":
 	if options.import_:
 		mo.import_(options.import_)
 
-	print 'miniorganizer debugging ' , options.debug
-
 	if options.debug == 50:
 		# If run without debugging, start intercepting stderr so we can display
 		# GTK intercepted exceptions to the user.
