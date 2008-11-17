@@ -22,10 +22,11 @@ from miniorganizer.models import Factory
 import miniorganizer.ui
 
 class AlarmsEditUI(ListContainer):
-	def __init__(self, mo, alarms = None, parent_model = None):
+	def __init__(self, mo, alarms = None, parent_model = None, event_ui=None):
 		self.mo = mo
 		self.alarms = alarms
 		self.parent_model = parent_model
+		self.event_ui = event_ui
 		self.factory = Factory()
 
 		columns = [
@@ -39,9 +40,10 @@ class AlarmsEditUI(ListContainer):
 		self.listcontainer_alarms.connect('edit-item', self.listcontainer__edit_item)
 
 	def listcontainer__add_item(self, *args):
+		start_time = self.event_ui.dateedit_start.dt
 		delta = datetime.timedelta()
 		alarm = self.factory.alarm(delta, self.parent_model)
-		alarm = miniorganizer.ui.AlarmEditUI(self.mo, alarm).run()
+		alarm = miniorganizer.ui.AlarmEditUI(self.mo, alarm, start_time).run()
 		if alarm:
 			self.alarms.append(alarm)
 			self.listcontainer_alarms.add_item(alarm)
