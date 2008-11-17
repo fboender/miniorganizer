@@ -34,7 +34,7 @@ class EventEditUI(GladeDelegate):
 		GladeDelegate.__init__(self, gladefile="mo_event_edit", toplevel_name='dialog_main')
 
 		# Set up the user interface
-		self.alarms_edit_ui = miniorganizer.ui.AlarmsEditUI(self.mo, self.new_alarms, self.event)
+		self.alarms_edit_ui = miniorganizer.ui.AlarmsEditUI(self.mo, self.new_alarms, self.event, self)
 		self.vbox_alarms.pack_start(self.alarms_edit_ui.listcontainer_alarms)
 		self.dateedit_start = miniorganizer.ui.DateTimeEditUI(event.get_start())
 		self.dateedit_end = miniorganizer.ui.DateTimeEditUI(event.get_end())

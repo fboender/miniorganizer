@@ -30,9 +30,10 @@ class AlarmEditUI(GladeDelegate):
 		'unknown': 0,
 	}
 
-	def __init__(self, mo, alarm):
+	def __init__(self, mo, alarm, start_time):
 		self.mo = mo
 		self.alarm = alarm
+		self.start_time = start_time
 		self.old_delta = self.alarm.get_delta()
 
 		GladeDelegate.__init__(self, gladefile="mo_alarm_edit", toplevel_name='dialog_main')
@@ -52,20 +53,25 @@ class AlarmEditUI(GladeDelegate):
 		gtk.main()
 		return(self.alarm)
 
+	def get_delta(self):
+		delta = datetime.timedelta(
+			days=-int(self.entry_days.get_text()),
+			hours=-int(self.entry_hours.get_text()),
+			minutes=-int(self.entry_minutes.get_text())
+		)
+		return(delta)
+		
 	def trigger_on_update(self, *args):
 		try:
-			delta = datetime.timedelta(
-				days=-int(self.entry_days.get_text()),
-				hours=-int(self.entry_hours.get_text()),
-				minutes=-int(self.entry_minutes.get_text())
-			)
-			self.alarm.set_delta(delta)
-			text = "Triggers on: %s" % (self.alarm.get_trigger_dt())
+			delta = self.get_delta()
+			text = "Triggers on: %s" % (self.start_time - delta)
 			self.label_trigger_on.set_text(text)
 		except ValueError, e:
 			pass
 		
 	def on_button_ok__clicked(self, *args):
+		delta = self.get_delta()
+		self.alarm.set_delta(delta)
 		self.quit()
 
 	def on_button_cancel__clicked(self, *args):
