@@ -55,6 +55,7 @@ class NoteEditUI(GladeDelegate):
 		self.quit()
 
 	def on_dialog_main__delete_event(self, *args):
+		self.note = None
 		self.quit()
 
 	def quit(self):

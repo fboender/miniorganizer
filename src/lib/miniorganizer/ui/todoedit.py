@@ -104,6 +104,7 @@ class TodoEditUI(GladeDelegate):
 		self.quit()
 
 	def on_dialog_main__delete_event(self, *args):
+		self.todo = None
 		self.quit()
 		
 	def quit(self):

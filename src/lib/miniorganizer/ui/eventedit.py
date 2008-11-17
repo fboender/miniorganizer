@@ -139,6 +139,7 @@ class EventEditUI(GladeDelegate):
 		self.quit()
 
 	def on_dialog_main__delete_event(self, *args):
+		self.event = None
 		self.quit()
 		
 	def quit(self):
