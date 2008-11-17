@@ -62,27 +62,29 @@ class MiniOrganizer:
 			'miniorganizer.auto_save': (bool, True),
 		}
 		self.config = config.Config(self.conf_fname, defaults=config_defaults)
-		self.first_time = False
 
 		# Load a given calendar or create a new empty one
 		if cal_fname:
 			self.cal_fname = cal_fname
 			self.load(self.cal_fname)
 		else:
-			self.cal_fname = os.path.join(self.conf_dir, 'miniorganizer.ics')
+			cal_fname = os.path.join(self.conf_dir, 'miniorganizer.ics')
 			try:
-				self.load(self.cal_fname)
-			except IOError, e:
-				self.new()
+				self.load(cal_fname)
+			except (IOError, OSError), e:
+				self.new(cal_fname)
+
+		self.first_time = False
 
 	def clear(self):
 		raise NotImplementedError()
 		
-	def new(self):
+	def new(self, cal_fname = None):
 		self.log.debug('Creating new iCal file.')
 		self.cal_model = self.factory.calendar()
 		self.cal_modified = False
-		self.cal_fname = None
+		self.cal_fname = cal_fname
+		self.save()
 		
 	def load(self, cal_fname):
 		self.log.debug('Loading iCal file \'%s\'.' % (cal_fname))
@@ -109,6 +111,7 @@ class MiniOrganizer:
 	def save(self, filename = None):
 		self.log.debug('Saving calendar \'%s\'' % (self.cal_fname))
 
+		print self.cal_fname
 		if filename:
 			# Save As..
 			f = file(filename, 'w')

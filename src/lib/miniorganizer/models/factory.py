@@ -42,6 +42,7 @@ class Factory():
 		Create a new CalendarModel.
 		"""
 		vcalendar = icalendar.Calendar()
+		vcalendar.set('PRODID', 'MiniOrganizer 0.3')
 		calendar_model = CalendarModel(vcalendar)
 		return(calendar_model)
 
