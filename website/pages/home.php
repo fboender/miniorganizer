@@ -10,7 +10,7 @@
 <div id='sidebar'>
 	<h2>Download</h2>
 	<div id='download'>
-		<a href='/releases/miniorganizer-0.2.1.tar.gz'>Release 0.2.1</a>
+		<a href='/releases/miniorganizer-0.3.tar.gz'>Release 0.3</a>
 	</div>
 
 	<h2>Screenshots</h2>
