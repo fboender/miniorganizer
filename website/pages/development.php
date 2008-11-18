@@ -15,3 +15,10 @@
 </ul>
 
 <p>You can submit your improvements, bug reports, feature requests, documentation improvements, patches, etc, to the <a href="https://svn.electricmonk.nl/trac/miniorganizer/newticket">ticket system</a></p>
+<p>When fixing bugs, please write code against the recent Subversion trunk for MiniOrganizer. You can make anonymous, read-only checkouts by running:
+<pre>
+svn checkout https://svn.electricmonk.nl/svn/miniorganizer/trunk
+</pre>
+
+Before sending in a patch, please make sure you're patching against the latest trunk by updating (<tt>svn update</tt>) your local trunk checkout. Also test your code against the latest Subversion trunk.
+</p>
