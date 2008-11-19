@@ -24,6 +24,18 @@ if [ "$?" -eq '1' ]; then
 	exit 3
 fi
 
+python -c "import gobject" 2>/dev/null
+if [ "$?" -eq '1' ]; then
+	echo "You don't have the python package 'gobject' installed. Please insall it."
+	exit 3
+fi
+
+python -c "import gtk" 2>/dev/null
+if [ "$?" -eq '1' ]; then
+	echo "You don't have the python package 'gtk' installed. Please install it."
+	exit 3
+fi
+
 #
 # Install Miniorganizer
 #
