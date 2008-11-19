@@ -25,7 +25,7 @@ todos.</p>
 <li> <p> Python DateUtil </p> </li>
 <li> <p> Python Glade2 </p> </li>
 </ul>
-<p>Most modern Linux desktops (Debian, Ubuntu confirmed) already have all of these except dateutil (<tt>easy_install dateutil</tt>) installed.</p>
+<p>Most modern Linux/BSD desktops (Debian, Ubuntu, OpenBSD confirmed) usually have binary packages for these dependencies, allowing for easy installation on those platforms.</p>
 
 <h3>Instructions</h3>
 <p>Please see the <a href="/documentation/userguide-0.2.html">userguide</a> for installation instructions.</p>
