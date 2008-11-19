@@ -11,6 +11,7 @@ todos.</p>
 <ul> <li> <p> One-time and recurring appointments.  </p> </li>
 <li> <p> Hierarchical Todos.  </p> </li>
 <li> <p> Multiple alarms per appointment and todo.  </p> </li>
+<li> <p> Basic notes.  </p></li>
 <li> <p> Alarm notification with snooze.  </p> </li>
 <li> <p> (Gnome) Panel docking.  </p> </li>
 <li> <p> Uses universal iCalendar files as storage format.  </p> </li>
