@@ -59,8 +59,11 @@ MiniOrganizer requires the following software in order to run properly:
 * Python DateUtil 
 * Python Glade2
 
-Instructions - Ubuntu / Debian
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Instructions 
+~~~~~~~~~~~~
+
+Ubuntu / Debian
+^^^^^^^^^^^^^^^
 
 In order to install MiniOrganizer on an Ubuntu or Debian system, follow these steps:
 
@@ -80,8 +83,29 @@ For the commandline based Aptitude, this would be:
 
 Now follow the general instructions mentioned below.
 
-Instructions - General
-~~~~~~~~~~~~~~~~~~~~~~
+OpenBSD
+^^^^^^^
+
+In order to install MiniOrganizer on an OpenBSD system, follow these steps:
+
+Python should already be installed on your system. If you're using a reasonably
+up-to-date system, it should also be the correct version (v2.4 or higher). So
+the first thing to do is install the required Python libraries. 
+
+Use your package manager to install the following OpenBSD packages: 
+
+* py-gobject
+* py-gtk2
+* py-dateutil
+
+For the commandline based pkg_add, this would be:
+
+ sudo pkg_add py-gobject py-gtk2 py-dateutil
+
+Now follow the general instructions mentioned below.
+
+General
+^^^^^^^
 
 Now download the MiniOrganizer tarball from the MiniOrganizer homepage and
 unpack it using your archive manager. For the commandline:
@@ -157,9 +181,9 @@ Options:
 Legal
 -----
 
-'MiniOrganizer' is Copyright 2008 by Ferry Boender and is released under the
-GNU General Public License v3 or higher. See the LICENSE file for more
-information.
+'MiniOrganizer' is Copyright 2008 by Ferry Boender et al (see Copyright
+section) and is released under the GNU General Public License v3. See
+the LICENSE file for more information.
 
 'Kiwi', which is distributed with MiniOrganizer, is Copyright 2003-2006 by
 Async Open Source and is released under the GNU Lesser General Public License
@@ -168,3 +192,12 @@ v2.1 or higher. See the lib/kiwi/LICENSE.txt file for more information.
 'iCalendar', which is distributed with MiniOrganizer, is Copyright 2008 by Max
 M et al and is released under the GNU Lesser General Public License v2.1. See
 lib/icalendar/LICENSE.txt for more information.
+
+Copyright
+~~~~~~~~~
+
+MiniOrganizer contains code and contributions, and is thus copyright by:
+
+* Ferry Boender
+* Michiel van Baak
+
