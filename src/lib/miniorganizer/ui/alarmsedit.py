@@ -53,7 +53,8 @@ class AlarmsEditUI(ListContainer):
 		self.listcontainer_alarms.remove_item(alarm)
 
 	def listcontainer__edit_item(self, listcontainer, alarm):
-		x = miniorganizer.ui.AlarmEditUI(self.mo, alarm)
+		start_time = self.event_ui.dateedit_start.dt
+		x = miniorganizer.ui.AlarmEditUI(self.mo, alarm, start_time)
 		alarm = x.run()
 		if alarm:
 			self.listcontainer_alarms.update_item(alarm)

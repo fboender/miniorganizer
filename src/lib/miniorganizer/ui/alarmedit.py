@@ -64,7 +64,7 @@ class AlarmEditUI(GladeDelegate):
 	def trigger_on_update(self, *args):
 		try:
 			delta = self.get_delta()
-			text = "Triggers on: %s" % (self.start_time - delta)
+			text = "Triggers on: %s" % (self.start_time + delta)
 			self.label_trigger_on.set_text(text)
 		except ValueError, e:
 			pass
