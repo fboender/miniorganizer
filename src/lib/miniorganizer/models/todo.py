@@ -18,6 +18,7 @@
 import datetime
 import miniorganizer
 from base import BaseModel
+from cgi import escape
 
 class TodoModel(BaseModel):
 
@@ -42,7 +43,7 @@ class TodoModel(BaseModel):
 			fmt = '<s>%s</s>'
 		else:
 			fmt = '%s'
-		return(fmt % (self.__vtodo.get('SUMMARY', '')))
+		return(fmt % (escape(self.__vtodo.get('SUMMARY', ''))))
 
 	def get_priority(self):
 		return(self.__vtodo.get('PRIORITY', '0'))

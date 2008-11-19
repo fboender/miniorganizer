@@ -17,7 +17,7 @@
 
 #import datetime
 from base import BaseModel
-#from copy import copy
+from cgi import escape
 
 class JournalModel(BaseModel):
 	
@@ -30,12 +30,18 @@ class JournalModel(BaseModel):
 	def get_summary(self):
 		return(self.__vjournal.get('SUMMARY', ''))
 
+	def get_summaryformat(self):
+		return(escape(self.__vjournal.get('SUMMARY', '')))
+
 	def set_summary(self, summary):
 		self.__vjournal.set('SUMMARY', summary)
 		self.modified = True
 
 	def get_description(self):
 		return(self.__vjournal.get('DESCRIPTION', ''))
+		
+	def get_descriptionformat(self):
+		return(escape(self.__vjournal.get('DESCRIPTION', '')))
 		
 	def set_description(self, description):
 		self.__vjournal.set('DESCRIPTION', description)

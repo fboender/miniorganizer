@@ -18,6 +18,7 @@
 import datetime
 from base import BaseModel
 from copy import copy
+from cgi import escape
 
 class EventModel(BaseModel):
 	
@@ -45,7 +46,7 @@ class EventModel(BaseModel):
 			fmt = '<b>%s</b>'
 		else:
 			fmt = '%s'
-		return(fmt % (self.get_summary()))
+		return(fmt % (escape(self.get_summary())))
 		
 	def get_description(self):
 		return(self.__vevent.get('DESCRIPTION', ''))
@@ -55,7 +56,7 @@ class EventModel(BaseModel):
 		self.modified = True
 
 	def get_descriptionformat(self):
-		return(self.get_description())
+		return(escape(self.get_description()))
 
 	def get_start(self):
 		dt = self.__vevent['DTSTART'].dt
