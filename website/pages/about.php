@@ -31,12 +31,17 @@ todos.</p>
 <p>Please see the <a href="/documentation/userguide-0.2.html">userguide</a> for installation instructions.</p>
 
 <h2>Legal</h2>
-<p><em>MiniOrganizer</em> is Copyright 2008 by Ferry Boender and is released under the
-GNU General Public License v3 or higher. See the LICENSE file for more
-information.</p>
+<p><em>MiniOrganizer</em> is Copyright 2008 by Ferry Boender et al (see Copyright
+section) and is released under the GNU General Public License v3. See the LICENSE file for more information.
 <p><em>Kiwi</em>, which is distributed with MiniOrganizer, is Copyright 2003-2006 by
 Async Open Source and is released under the GNU Lesser General Public License
 v2.1 or higher. See the lib/kiwi/LICENSE.txt file for more information.</p>
 <p><em>iCalendar</em>, which is distributed with MiniOrganizer, is Copyright 2008 by Max
 M et al and is released under the GNU Lesser General Public License v2.1. See
 lib/icalendar/LICENSE.txt for more information.</p>
+<h3>Copyright</h3>
+<p>MiniOrganizer contains code and contributions (and is thus copyright) by the following persons:</p>
+<ul>
+<li>Ferry Boender</li>
+<li>Michiel van Baak</li>
+</ul></p>

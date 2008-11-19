@@ -196,7 +196,7 @@ lib/icalendar/LICENSE.txt for more information.
 Copyright
 ~~~~~~~~~
 
-MiniOrganizer contains code and contributions, and is thus copyright by:
+MiniOrganizer contains code and contributions (and is thus copyright) by the following persons:
 
 * Ferry Boender
 * Michiel van Baak
