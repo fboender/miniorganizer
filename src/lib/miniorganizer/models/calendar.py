@@ -134,18 +134,14 @@ class CalendarModel(BaseModel):
 		"""
 		return(self.get_models(TodoModel))
 
-	def get_alarms(self, dtstart=None, dtend=None):
+	def get_alarms(self):
 		"""
-		Return a list of AlarmModel models in the calendar. Also returns alarms
-		for recurring events if dtstart and dtend are given.
+		Return a list of AlarmModel models in the calendar. 
 		"""
 		alarms = []
 		for model in self.__models:
 			if hasattr(model, 'get_alarms'):
 				alarms.extend(model.get_alarms())
-		if dtstart and dtend:
-			for model in self.get_events_recurring(dtstart, dtend):
-				print model
 
 		return(alarms)
 

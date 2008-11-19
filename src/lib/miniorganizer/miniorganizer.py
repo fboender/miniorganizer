@@ -111,7 +111,6 @@ class MiniOrganizer:
 	def save(self, filename = None):
 		self.log.debug('Saving calendar \'%s\'' % (self.cal_fname))
 
-		print self.cal_fname
 		if filename:
 			# Save As..
 			f = file(filename, 'w')
