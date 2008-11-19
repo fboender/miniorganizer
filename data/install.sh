@@ -29,8 +29,10 @@ fi
 #
 echo "Installing MiniOrganizer in $INSTALLDIR"
 mkdir -p $INSTALLDIR
-cp -ar bin $INSTALLDIR
-cp -ar docs $INSTALLDIR
+cp -r bin $INSTALLDIR
+cp -r docs $INSTALLDIR
+chmod 755 $INSTALLDIR/bin/miniorganizer
+chmod 755 $INSTALLDIR/bin/miniorganizer-alarm
 
 echo "Putting executable symlink in $BINDIR"
 rm $BINDIR/miniorganizer 2>/dev/null
