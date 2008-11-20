@@ -30,6 +30,9 @@ cp data/desktop/miniorganizer-alarm.desktop releases/miniorganizer-$VERSION/desk
 find ./releases/miniorganizer-$VERSION/ -name ".svn" -type d -print0 | xargs -0 /bin/rm -rf
 find ./releases/miniorganizer-$VERSION/ -name "*.pyc" -type f -print0 | xargs -0 /bin/rm -rf
 
+# Version bump
+replace.py ./releases/miniorganizer-$VERSION/ %%VERSION%% $VERSION
+
 cd releases
 tar -czf miniorganizer-$VERSION.tar.gz miniorganizer-$VERSION/
 cd ..
