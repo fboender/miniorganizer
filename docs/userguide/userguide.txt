@@ -112,10 +112,10 @@ unpack it using your archive manager. For the commandline:
 
  tar -vxzf miniorganizer-*.tar.gz
 
-Change to the unarchived directory, and run 'setup.sh':
+Change to the unarchived directory, and run 'install.sh':
 
  cd miniorganizer-*/
- ./setup.sh
+ ./install.sh
 
 This will install MiniOrganizer in the '/usr/local/share/miniorganizer'
 directory. Links to the binaries will be installed in '/usr/local/bin/'.
