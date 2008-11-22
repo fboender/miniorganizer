@@ -29,7 +29,7 @@ todos.</p>
 <p>Most modern Linux/BSD desktops (Debian, Ubuntu, OpenBSD confirmed) usually have binary packages for these dependencies, allowing for easy installation on those platforms.</p>
 
 <h3>Instructions</h3>
-<p>Please see the <a href="/documentation/userguide-0.2.html">userguide</a> for installation instructions.</p>
+<p>Please see the <a href="/documentation/userguide-0.3.1.html">userguide</a> for installation instructions.</p>
 
 <h2>Legal</h2>
 <p><em>MiniOrganizer</em> is Copyright 2008 by Ferry Boender et al (see Copyright
