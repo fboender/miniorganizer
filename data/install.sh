@@ -2,6 +2,7 @@
 
 INSTALLDIR='/usr/local/lib/miniorganizer'
 BINDIR='/usr/local/bin'
+MANDIR='/usr/local/man'
 MENUDIR='/usr/local/share/applications/'
 
 #
@@ -41,8 +42,10 @@ fi
 #
 echo "Installing MiniOrganizer in $INSTALLDIR"
 mkdir -p $INSTALLDIR
+mkdir -p $MANDIR/man1
 cp -r bin $INSTALLDIR
-cp -r docs $INSTALLDIR
+cp -r docs/userguide.html $INSTALLDIR
+cp -r docs/man/* $MANDIR/man1
 chmod 755 $INSTALLDIR/bin/miniorganizer
 chmod 755 $INSTALLDIR/bin/miniorganizer-alarm
 

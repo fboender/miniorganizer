@@ -15,6 +15,7 @@ fi
 mkdir releases
 mkdir releases/miniorganizer-$VERSION
 mkdir releases/miniorganizer-$VERSION/docs
+mkdir releases/miniorganizer-$VERSION/man
 mkdir releases/miniorganizer-$VERSION/bin
 mkdir releases/miniorganizer-$VERSION/desktop
 
@@ -23,6 +24,7 @@ cp src/* releases/miniorganizer-$VERSION/bin/ -ar
 cp data/install.sh releases/miniorganizer-$VERSION/ 
 cp data/uninstall.sh releases/miniorganizer-$VERSION/ 
 cp docs/userguide/userguide.html releases/miniorganizer-$VERSION/docs/
+cp -r docs/manpages/man1 releases/miniorganizer-$VERSION/docs/man
 cp data/desktop/miniorganizer.desktop releases/miniorganizer-$VERSION/desktop
 cp data/desktop/miniorganizer-alarm.desktop releases/miniorganizer-$VERSION/desktop
 
