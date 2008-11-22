@@ -30,6 +30,9 @@
 <p><a href='?page=about'>More information &rarr;</a></p>
 
 <h2>News</h2>
+<h3>Sat Nov 22 14:36:08 CET 2008</h3>
+<p>Anonymous users can now add comments and patches to <a href="https://svn.electricmonk.nl/trac/miniorganizer/report/1">Bug reports</a>.</p>
+<p>In other news, MiniOrganizer 0.3.1 has been prepared to work under OpenBSD. Many thanks to Michiel van Baak for this and various other patches.</p>
 <h3>Sat Nov 22 12:00:21 CET 2008</h3>
 <p>Version <a href="?page=download">0.3.1</a> is now available! Features and bugfixes include:</p>
 <ul>
