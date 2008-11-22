@@ -1,5 +1,21 @@
 <h1>News</h1>
 
+<h2>Sat Nov 22 12:00:21 CET 2008</h2>
+<p>Version <a href="/download">0.3.1</a> is now available! Features and bugfixes include:</p>
+<ul>
+	<li>Feature added: Manual pages.</li>
+	<li>Bug fixed: Installer now checks for all required dependencies.</li>
+	<li>Bug fixed: OpenBSD support.</li>
+	<li>Bug fixed: Manual updated.</li>
+	<li>Bug fixed: Some debugging functions fixed.</li>
+	<li>Bug fixed: A bug that occurred when ampersands where included in various input boxes has been fixed.</li>
+	<li>Bug fixed: The 'Triggers on' display when editing an alarm has been fixed. It now shows the correct trigger date/time.</li>
+	<li>Bug fixed: When canceling a new appointment/todo/note using the window's little X (close) icon, the new appointment/todo/note is no longer added.</li>
+	<li>Bug fixed: A new calendar is now automatically created upon first start of MiniOrganizer.</li>
+	<li>Bug fixed: Opening a different calendar now correctly refreshes the Todo and Notes tab.</li>
+	<li>Other fix: The license was changed from "GPL v3 or later" to "GPL v3".</li>
+</ul>
+
 <h2>Wed Nov 12 22:06:33 CEST 2008</h2>
 <p>Version <a href="/download">0.3</a>! Features and bugfixes include:</p>
 <ul>

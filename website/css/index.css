@@ -34,7 +34,7 @@ div#menu_l {
 div#menu_c {
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 12px;
 	padding-top: 5px;
 }
 div#menu_c a {
@@ -42,7 +42,7 @@ div#menu_c a {
 	color: #FFFFFF;
 }
 div#menu_c img.menu_sep {
-	margin-left: 50px; margin-right: 50px;
+	margin-left: 20px; margin-right: 20px;
 	vertical-align: middle;
 }
 div#menu_r {
