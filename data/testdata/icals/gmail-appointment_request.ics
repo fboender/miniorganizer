@@ -1,0 +1,30 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTART:20081231T200000Z
+DTEND:20090101T040000Z
+DTSTAMP:20081122T222901Z
+ORGANIZER;CN=Ferry Boender:mailto:ferry.boender@dmail.com
+UID:edgh5nqnht7sq3bfpmuec5j0jg@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=Ferry Boender;X-NUM-GUESTS=0:mailto:ferry.boender@dmail.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=f.boender@zx.nl;X-NUM-GUESTS=0:mailto:f.boender@zx.nl
+CLASS:PRIVATE
+CREATED:20081122T221123Z
+DESCRIPTION:Celebrate newyears-eve in Barneveld with friends and a couple o
+ f beers.\nUw afspraak weergeven op http://www.google.com/calendar/event?act
+ ion=VIEW&eid=ZWRnaDVucW5odDdzcTNiZnBtdWVjNWowamcgZmVycnkuYm9lbmRlckBt&tok=M
+ jMjZmVycnkuYm9lbmRlckBnbWFpbC5jb20zODQ3YWMzMDlmMDIxNzhiNDZjZTExMjIyZmI4M2Q4
+ OGE4ZmU2NzZh&ctz=Europe%2FAmsterdam&hl=nl.
+LAST-MODIFIED:20081122T221224Z
+LOCATION:Barneveld
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Celebrate newyears
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

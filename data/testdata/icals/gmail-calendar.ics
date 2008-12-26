@@ -55,7 +55,7 @@ BEGIN:VALARM
 ACTION:EMAIL
 DESCRIPTION:This is an event reminder
 SUMMARY:Alarm notification
-ATTENDEE:mailto:ferry.boender@gmail.com
+ATTENDEE:mailto:ferry.boender@dmail.com
 TRIGGER:-P0DT0H10M0S
 END:VALARM
 BEGIN:VALARM
@@ -67,7 +67,7 @@ BEGIN:VALARM
 ACTION:EMAIL
 DESCRIPTION:This is an event reminder
 SUMMARY:Alarm notification
-ATTENDEE:mailto:ferry.boender@gmail.com
+ATTENDEE:mailto:ferry.boender@dmail.com
 TRIGGER:-P1D
 END:VALARM
 END:VEVENT
