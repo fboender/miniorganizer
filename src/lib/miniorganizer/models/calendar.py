@@ -31,7 +31,7 @@ class CalendarModel(BaseModel):
 	rest of the application because of the way the Kiwi library's MVC works.
 
 	All access to calendars from the application should go through this class,
-	as it provides verification and consitancy of the data in the calendar.
+	as it provides verification and consistancy of the data in the calendar.
 	"""
 	
 	def __init__(self, vcalendar):
@@ -42,6 +42,16 @@ class CalendarModel(BaseModel):
 		self.modified = True
 		for vcomponent in self.__vcalendar.subcomponents:
 			self.__models.append(self.factory.model_from_vcomponent(vcomponent))
+
+	def get_method(self):
+		return(self.__vcalendar.get('METHOD', None))
+
+	def get_models_all(self):
+		"""
+		Return a list of all the models. If a model is not supported, it will be
+		skipped.
+		"""
+		return([model for model in self.__models])
 
 	def get_models(self, model_type):
 		"""

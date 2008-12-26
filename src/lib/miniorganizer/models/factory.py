@@ -139,9 +139,12 @@ class Factory():
 		"""
 		Create a Model from a vComponent. Automatically guesses the type of the
 		vComponent (vEvent, vTodo, etc) and returns a EventModel, TodoModel,
-		etc created from the vComponent.
+		etc created from the vComponent, or None is the type of vComponent is
+		not supported.
 		"""
-		if isinstance(vcomponent, icalendar.cal.Event):
+		if isinstance(vcomponent, icalendar.cal.Calendar):
+			return(self.calendar_from_vcomponent(vcomponent))
+		elif isinstance(vcomponent, icalendar.cal.Event):
 			return(self.event_from_vcomponent(vcomponent))
 		elif isinstance(vcomponent, icalendar.cal.Todo):
 			return(self.todo_from_vcomponent(vcomponent))
@@ -150,4 +153,5 @@ class Factory():
 		elif isinstance(vcomponent, icalendar.cal.Journal):
 			return(self.journal_from_vcomponent(vcomponent))
 		else:
-			raise NotImplementedError('Component type \'%s\' is not supported yet.' % (type(vcomponent)))
+			return(None)
+			#raise NotImplementedError('Component type \'%s\' is not supported yet.' % (type(vcomponent)))

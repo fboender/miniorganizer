@@ -15,12 +15,11 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-from miniorganizer import MiniOrganizer
-from config import Config
-from itip import ITIP
-import models
-import ui
+import icalendar
 
-# Because we don't want to polute the namespace with stuff, delete some things
-# here.
-del miniorganizer, config, itip
+class ITIP(object):
+	def __init__(self, ical_str):
+		self.ical_str = ical_str
+		self.ical = icalendar.Calendar.from_string(self.ical_str)
+
+		print self.ical

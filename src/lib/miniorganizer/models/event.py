@@ -99,6 +99,9 @@ class EventModel(BaseModel):
 		self.__vevent.set('LOCATION', location)
 		self.modified = True
 
+	def get_organizer(self):
+		return(self.__vevent.get('ORGANIZER', None))
+
 	def get_alarms(self):
 		return(self.__alarms)
 

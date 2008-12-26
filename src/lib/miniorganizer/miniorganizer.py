@@ -22,10 +22,11 @@ import datetime
 import icalendar
 import config
 import time
-from models import Factory, AlarmModel, TodoModel, EventModel, CalendarModel
+from models import Factory, AlarmModel, TodoModel, EventModel, JournalModel, CalendarModel
 from dateutil import rrule
 import copy
 from kiwi.ui import dialogs
+import ui
 
 class MiniOrganizer:
 	"""
@@ -133,13 +134,27 @@ class MiniOrganizer:
 		contents = f.read()
 		f.close()
 
-		calendar = icalendar.Calendar.from_string(contents)
-		for item in calendar.subcomponents:
-			model = self.factory.model_from_vcomponent(item)
-			self.calendarModel.add(model)
+		vcalendar = icalendar.Calendar.from_string(contents)
+		calendar = self.factory.model_from_vcomponent(vcalendar)
 
-		self.cal_modified = True
-		
+		method = calendar.get_method()
+		for model in calendar.get_models_all():
+			# Only add certain component types
+			if isinstance(model, (EventModel, TodoModel, JournalModel)):
+				# If this is a request, show the user a dialog that lets them accept it.
+				if method == 'REQUEST' and isinstance(model, EventModel):
+						request_ui = ui.EventRequestUI(self, model)
+						response = request_ui.run()
+						if response['notify']:
+							# Mail organizer
+							pass
+						if not (response['choice'] in ('ACCEPT', 'TENTATIVE')):
+							continue
+
+				print 'adding'
+				self.cal_model.add(model)
+				self.cal_modified = True
+
 	def modified_ondisk(self):
 		"""
 		Return True if the calendar has changed on disk since it's last been

@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Commandline interface to take care of starting MiniOrganizer.
+"""
+
 __author__ = 'Ferry Boender'
 __version__ = '%%VERSION%%'
 

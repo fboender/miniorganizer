@@ -55,7 +55,7 @@ class MiniOrganizerUI(GladeDelegate):
 		
 	def on_menuitem_new__activate(self, *args):
 		self.mo.clear()
-		self.tab_events.refresh()
+		self.refresh()
 		self.menuitem_save.set_sensitive(False)
 		
 	def on_menuitem_open__activate(self, *args):
@@ -63,9 +63,7 @@ class MiniOrganizerUI(GladeDelegate):
 		if filename:
 			self.mo.load(filename)
 
-		self.tab_events.refresh()
-		self.tab_todos.refresh()
-		self.tab_notes.refresh()
+		self.refresh()
 		self.menuitem_save.set_sensitive(False)
 
 	def on_menuitem_save__activate(self, *args):
@@ -88,6 +86,7 @@ class MiniOrganizerUI(GladeDelegate):
 		filename = dialogs.open('Select file to import', patterns=['*.ics'])
 		if filename:
 			self.mo.import_(filename)
+			self.refresh()
 		self.menuitem_save.set_sensitive(True)
 
 	def on_menuitem_quit__activate(self, *args):
@@ -96,6 +95,11 @@ class MiniOrganizerUI(GladeDelegate):
 	def on_menuitem_about__activate(self, *args):
 		miniorganizer.ui.AboutUI()
 
+	def refresh(self):
+		self.tab_events.refresh()
+		self.tab_todos.refresh()
+		self.tab_notes.refresh()
+		
 	def quit(self):
 		if not self.mo.config['miniorganizer.auto_save'] and self.mo.cal_model.modified_inmem():
 			response = dialogs.yesno('You have unsaved changes in this calendar. Are you sure you want to quit?')

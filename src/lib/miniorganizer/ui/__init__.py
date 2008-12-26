@@ -37,6 +37,7 @@ from datetimeedit import DateTimeEditUI
 from noteedit import NoteEditUI
 
 # Misc dialogs
+from eventrequest import EventRequestUI
 from error import ErrorUI
 
 # Because we don't want to polute the namespace with stuff, delete some things
