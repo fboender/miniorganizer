@@ -1,0 +1,14 @@
+ITIP
+====
+
+This document roughly describes the events that take place when dealing with ITIP.
+
+Method:REQUEST
+--------------
+
+1a. MiniOrganizer scans a mailbox and finds a new icalendar file/attachment.
+1b. User imports an icalendar file.
+
+2. icalendar file is inspected for a REQUEST.
+
+3. A base calendar (the user calendar) is inspected to check the current state of the REQUESTed appointment.
