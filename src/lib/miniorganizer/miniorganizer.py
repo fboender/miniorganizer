@@ -27,6 +27,7 @@ from dateutil import rrule
 import copy
 from kiwi.ui import dialogs
 import ui
+from itip import ITIP
 
 class MiniOrganizer:
 	"""
@@ -138,6 +139,12 @@ class MiniOrganizer:
 		calendar = self.factory.model_from_vcomponent(vcalendar)
 
 		method = calendar.get_method()
+		if method in ['REQUEST']:
+			# Caledar contains a request method. Parse the request method using
+			# the ITIP library.
+			itip = ITIP(self.cal_model, calendar)
+			return
+
 		for model in calendar.get_models_all():
 			# Only add certain component types
 			if isinstance(model, (EventModel, TodoModel, JournalModel)):

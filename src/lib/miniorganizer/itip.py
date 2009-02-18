@@ -15,11 +15,22 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+The ITIP library takes care of the exchange of iCalendar information such as 
+meeting requests, etc. 
+"""
+
 import icalendar
 
 class ITIP(object):
-	def __init__(self, ical_str):
-		self.ical_str = ical_str
-		self.ical = icalendar.Calendar.from_string(self.ical_str)
+	def __init__(self, base_cal, remote_cal):
+		self.base_cal = base_cal
+		self.remote_cal = remote_cal
+		self.events = []
 
-		print self.ical
+		# Check if the remote cal has anything we need to act upon.  In there
+		# is something we need to act upon, we place an event in the event
+		# queue so that the UI can show information about it.
+		method = self.remote_cal.get_method()
+		if method.upper() == 'REQUEST':
+			self.events.append( ('REQUEST', self.remote_cal) )
