@@ -1,0 +1,5 @@
+The Column class checks to see if data_type is None, and if it is, it transforms it into the 'str' data type. I've modified the constructor to have 'str' be the default data_type instead of None and removed the special check for None.
+
+The ColoredColumn class did a check to see if the data_type was 'int'. This meant ColoredColumn only worked for 'int' columns. The patch removes the check as ColoredColumn works just fine with 'str', 'int', 'datetime.datetime' and probably other data types. 
+
+In order to make ColeredColumn more like the normal Column class, this patch also sets the default data_type of ColoredColumn to 'str'.

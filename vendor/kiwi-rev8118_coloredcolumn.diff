@@ -1,0 +1,33 @@
+diff -Naur kiwi/ui/objectlist.py /home/todsah/dev/kiwi/kiwi/ui/objectlist.py
+--- kiwi/ui/objectlist.py	2009-06-19 13:42:25.000000000 +0200
++++ /home/todsah/dev/kiwi/kiwi/ui/objectlist.py	2009-06-19 14:07:16.000000000 +0200
+@@ -178,7 +178,7 @@
+     # initial properties
+     on_attach_renderer = None
+ 
+-    def __init__(self, attribute='', title=None, data_type=None, **kwargs):
++    def __init__(self, attribute='', title=None, data_type=str, **kwargs):
+         """
+         Creates a new Column, which describes how a column in a
+         ObjectList should be rendered.
+@@ -207,8 +207,6 @@
+ 
+         kwargs['attribute'] = attribute
+         kwargs['title'] = title or attribute.capitalize()
+-        if not data_type:
+-            data_type = str
+         kwargs['data_type'] = data_type
+ 
+         # If we don't specify a justification, right align it for int/float
+@@ -681,10 +679,8 @@
+         ...               data_func=colorize),
+     """
+ 
+-    def __init__(self, attribute, title=None, data_type=None,
++    def __init__(self, attribute, title=None, data_type=str,
+                  color=None, data_func=None, use_data_model=False, **kwargs):
+-        if not issubclass(data_type, number):
+-            raise TypeError("data type must be a number")
+         if not callable(data_func):
+             raise TypeError("data func must be callable")
+ 
