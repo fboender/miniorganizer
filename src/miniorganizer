@@ -63,9 +63,10 @@ class ErrorReporter(object):
 			self.pos = stderr_buf.len
 			self.stderr.write(text)
 
-			# Show the error dialog
-			mo_error = miniorganizer.ui.ErrorUI(mo, text)
-			mo_error.run()
+			# Show the error dialog (unless the error is a gtkWarning)
+			if not 'GtkWarning' in text:
+				mo_error = miniorganizer.ui.ErrorUI(mo, text)
+				mo_error.run()
 		return(True)
 
 if __name__ == "__main__":
