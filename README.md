@@ -19,6 +19,12 @@ recursive todos.
 *   (Gnome) Panel docking.
 *   Uses universal iCalendar files as storage format.
 
+### Screenshots
+
+You can find some screenshots here:
+
+*   [Screenshots](https://bitbucket.org/fboender/miniorganizer/wiki/Screenshots)
+
 Installation
 ------------
 
