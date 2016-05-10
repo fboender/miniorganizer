@@ -23,10 +23,10 @@ recursive todos.
 
 You can find some screenshots here:
 
-* [Calendar](https://raw.githubusercontent.com/fboender/miniorganizer/master/doc/screenshots/calendar.png)
-* [Calendar Add](https://raw.githubusercontent.com/fboender/miniorganizer/master/doc/screenshots/calendar_add.png)
-* [Todo](https://raw.githubusercontent.com/fboender/miniorganizer/master/doc/screenshots/todo.png)
-* [Todo Add](https://raw.githubusercontent.com/fboender/miniorganizer/master/doc/screenshots/todo_add.png)
+* [Calendar](https://raw.githubusercontent.com/fboender/miniorganizer/master/docs/screenshots/calendar.png)
+* [Calendar Add](https://raw.githubusercontent.com/fboender/miniorganizer/master/docs/screenshots/calendar_add.png)
+* [Todo](https://raw.githubusercontent.com/fboender/miniorganizer/master/docs/screenshots/todo.png)
+* [Todo Add](https://raw.githubusercontent.com/fboender/miniorganizer/master/docs/screenshots/todo_add.png)
 
 Installation
 ------------
