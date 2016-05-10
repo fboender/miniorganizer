@@ -1,6 +1,9 @@
 MiniOrganizer
 =============
 
+![Activity: Abandoned](https://img.shields.io/badge/activity-abandoned-red.svg)
+
+
 About
 -----
 
